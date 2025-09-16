@@ -36,7 +36,7 @@ const contactInfo = [
   },
   {
     icon: Clock,
-    title: 'Horaires d\'Ouverture',
+    title: 'Horaires d&apos;Ouverture',
     details: [
       'Lun - Sam: 8h00 - 19h00',
       'Dimanche: 9h00 - 17h00',
@@ -129,7 +129,7 @@ export default function ContactPage() {
               Contactez-Nous
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-              Nous sommes là pour vous accompagner dans votre projet d'aménagement. 
+              Nous sommes là pour vous accompagner dans votre projet d&apos;aménagement. 
               Contactez nos experts pour des conseils personnalisés et un devis gratuit.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -258,7 +258,7 @@ export default function ContactPage() {
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="form-label">
-                        Catégorie d'Intérêt
+                        Catégorie d&apos;Intérêt
                       </label>
                       <select
                         name="category"
@@ -348,7 +348,7 @@ export default function ContactPage() {
                         className="mt-1 w-4 h-4 text-accent border-gray-300 rounded focus:ring-accent"
                       />
                       <label htmlFor="consent" className="text-sm text-gray-600">
-                        J'accepte que mes données personnelles soient utilisées pour traiter ma demande. 
+                        J&apos;accepte que mes données personnelles soient utilisées pour traiter ma demande. 
                         Voir notre <a href="/politique-confidentialite" className="text-accent hover:underline">politique de confidentialité</a>.
                       </label>
                     </div>
@@ -442,7 +442,7 @@ export default function ContactPage() {
             {/* Quick Contact */}
             <div className="bg-gradient-to-r from-accent to-accent/80 rounded-2xl p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">
-                Besoin d'une Réponse Rapide ?
+                Besoin d&apos;une Réponse Rapide ?
               </h3>
               <p className="mb-6 opacity-90">
                 Pour une réponse immédiate, contactez-nous directement par téléphone ou WhatsApp.
@@ -617,11 +617,11 @@ export default function ContactPage() {
               },
               {
                 question: "Proposez-vous un service de montage ?",
-                answer: "Oui, nous proposons un service de livraison et montage professionnel. Nos équipes qualifiées se chargent de l'installation dans les règles de l'art."
+                answer: "Oui, nous proposons un service de livraison et montage professionnel. Nos équipes qualifiées se chargent de l&apos;installation dans les règles de l&apos;art."
               },
               {
                 question: "Quelle est votre politique de garantie ?",
-                answer: "Tous nos meubles bénéficient d'une garantie de 2 ans couvrant les défauts de fabrication. Nous offrons également un service après-vente complet."
+                answer: "Tous nos meubles bénéficient d&apos;une garantie de 2 ans couvrant les défauts de fabrication. Nous offrons également un service après-vente complet."
               },
               {
                 question: "Puis-je personnaliser mes meubles ?",
@@ -652,7 +652,7 @@ export default function ContactPage() {
 
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-6">
-              Vous avez d'autres questions ?
+              Vous avez d&apos;autres questions ?
             </p>
             <a
               href="mailto:contact@meubles-senegal.com"

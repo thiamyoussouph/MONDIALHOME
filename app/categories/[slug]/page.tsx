@@ -1,7 +1,7 @@
 // app/categories/[slug]/page.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, use } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Filter, Grid, List, Star, Heart, ShoppingCart, ChevronDown, ArrowLeft } from 'lucide-react'
@@ -90,7 +90,7 @@ const mockProducts = [
   },
   {
     id: 5,
-    name: 'Canapé d\'Angle',
+    name: 'Canapé d&apos;Angle',
     price: 680000,
     originalPrice: 780000,
     image: '/images/canape-angle-1.jpg',
@@ -127,7 +127,11 @@ const filters = {
   availability: ['En stock', 'Sur commande']
 }
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
+export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  // Utilisation du hook use() pour résoudre la Promise params dans Next.js 15
+  const resolvedParams = use(params)
+  const slug = resolvedParams.slug
+
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [sortBy, setSortBy] = useState('popular')
   const [showFilters, setShowFilters] = useState(false)
@@ -135,7 +139,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
   const [selectedColors, setSelectedColors] = useState<string[]>([])
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([])
 
-  const category = categoryData[params.slug as keyof typeof categoryData]
+  const category = categoryData[slug as keyof typeof categoryData]
   
   if (!category) {
     return (
@@ -143,7 +147,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-primary mb-4">Catégorie non trouvée</h1>
           <Link href="/" className="btn-primary">
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </Link>
         </div>
       </div>
@@ -168,7 +172,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
               className="inline-flex items-center text-accent hover:text-white transition-colors mb-6"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Retour à l'accueil
+              Retour à l&apos;accueil
             </Link>
             
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -629,7 +633,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
                   Aucun produit trouvé
                 </h3>
                 <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                  Essayez de modifier vos critères de recherche ou explorez d'autres catégories.
+                  Essayez de modifier vos critères de recherche ou explorez d&apos;autres catégories.
                 </p>
                 <button 
                   onClick={() => {
@@ -657,7 +661,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-bold text-primary mb-4">
-              Besoin d'Aide pour Choisir ?
+              Besoin d&apos;Aide pour Choisir ?
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               Nos experts sont là pour vous conseiller et vous aider à trouver le mobilier parfait pour votre intérieur.

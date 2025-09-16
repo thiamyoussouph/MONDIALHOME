@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Star, Truck, Shield, Headphones, Award } from 'lucide-react'
 import HeroCarousel from './components/HeroCarousel'
 
@@ -199,7 +200,7 @@ export default function HomePage() {
               </span>
               <h2 className="text-5xl font-bold text-primary mb-6 leading-tight">
                 Nos Pièces
-                <span className="block text-accent">d'Exposition</span>
+                <span className="block text-accent">&apos;Exposition</span>
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed">
                 Visitez virtuellement notre showroom et découvrez une sélection curatée de meubles 
@@ -223,10 +224,11 @@ export default function HomePage() {
                 
                 {/* Image avec effet parallax */}
                 <div className="absolute inset-0">
-                  <img 
+                  <Image 
                     src={featuredProducts[0].image || "/images/placeholder-product.jpg"} 
                     alt={featuredProducts[0].name}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[2000ms]"
+                    fill
+                    className="object-cover transform group-hover:scale-110 transition-transform duration-[2000ms]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 </div>
@@ -288,10 +290,11 @@ export default function HomePage() {
                     
                     {/* Image produit */}
                     <div className="relative h-48 overflow-hidden">
-                      <img 
+                      <Image 
                         src={product.image || "/images/placeholder-product.jpg"} 
                         alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute top-3 right-3">
                         <span className="bg-white/90 text-gray-800 px-3 py-1 text-xs font-medium rounded-full shadow-md">
@@ -354,7 +357,7 @@ export default function HomePage() {
                 Inspirez-vous de nos Ambiances
               </h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Découvrez comment nos meubles s'intègrent parfaitement dans différents styles d'intérieur
+                Découvrez comment nos meubles s&apos;intègrent parfaitement dans différents styles d&apos;intérieur
               </p>
             </div>
 
@@ -489,7 +492,7 @@ export default function HomePage() {
               
               {/* Subtitle */}
               <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-                Une expérience d'excellence avec des services premium pour votre satisfaction totale depuis plus de 15 ans
+                Une expérience d&apos;excellence avec des services premium pour votre satisfaction totale depuis plus de 15 ans
               </p>
             </div>
           </motion.header>
@@ -554,7 +557,7 @@ export default function HomePage() {
                   Nos Résultats en Chiffres
                 </h3>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                  Des données concrètes qui témoignent de notre engagement envers l'excellence
+                  Des données concrètes qui témoignent de notre engagement envers l&apos;excellence
                 </p>
               </header>
 
@@ -563,7 +566,7 @@ export default function HomePage() {
                 {[
                   { number: "2500+", label: "Clients Satisfaits", icon: "👥" },
                   { number: "98%", label: "Taux de Satisfaction", icon: "⭐" },
-                  { number: "15+", label: "Années d'Expérience", icon: "🏆" },
+                  { number: "15+", label: "Années d&apos;Expérience", icon: "🏆" },
                   { number: "500m²", label: "Showroom à Dakar", icon: "🏢" }
                 ].map((stat, index) => (
                   <motion.div
@@ -678,7 +681,7 @@ export default function HomePage() {
                   Rejoignez Plus de 2500 Clients Satisfaits
                 </h3>
                 <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed">
-                  Bénéficiez dès aujourd'hui de notre expertise reconnue pour créer l'intérieur de vos rêves
+                  Bénéficiez dès aujourd&apos;hui de notre expertise reconnue pour créer l&apos;intérieur de vos rêves
                 </p>
                 
                 {/* CTA Buttons */}
@@ -716,7 +719,7 @@ export default function HomePage() {
               Prêt à Transformer Votre Intérieur ?
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Contactez-nous dès aujourd'hui pour un devis personnalisé et découvrez comment nous pouvons créer l'espace de vos rêves.
+              Contactez-nous dès aujourd&apos;hui pour un devis personnalisé et découvrez comment nous pouvons créer l&apos;espace de vos rêves.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

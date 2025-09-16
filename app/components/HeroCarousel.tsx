@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 // Images du showroom - remplacez par vos vraies images
 const showroomImages = [
@@ -96,10 +97,12 @@ const HeroCarousel = () => {
           transition={{ duration: 0.5 }}
           className="absolute inset-0"
         >
-          <img
+          <Image
             src={showroomImages[currentIndex].src}
             alt={showroomImages[currentIndex].alt}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority={currentIndex === 0}
           />
           {/* Overlay gradient */}
           <div className="absolute inset-0 bg-black bg-opacity-40" />

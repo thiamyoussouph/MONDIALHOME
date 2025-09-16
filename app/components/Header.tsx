@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Menu, X, ChevronDown, Search, Phone } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -50,20 +51,21 @@ export default function Header() {
           <div className="flex justify-between items-center h-16">
             
             {/* Logo */}
-     <div className="flex items-center space-x-3">
-    <div className="w-10 h-10 relative rounded-full overflow-hidden bg-white">
-    <img 
-      src="/images/logo.png" 
-      alt="Meubles Sénégal Logo" 
-      className="w-full h-full object-cover"
-    />
-  </div>
-    <div>
-      <h1 className="text-xl font-bold text-primary">Mondiale Home</h1>
-      <p className="text-xs text-gray-600">Qualité & Design</p>
-    </div>
-  </div>
-
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 relative rounded-full overflow-hidden bg-white">
+                <Image 
+                  src="/images/logo.png" 
+                  alt="Meubles Sénégal Logo" 
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-primary">Mondiale Home</h1>
+                <p className="text-xs text-gray-600">Qualité & Design</p>
+              </div>
+            </div>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
@@ -200,7 +202,7 @@ export default function Header() {
                   </div>
 
                   <Link 
-                    href="/a-propos" 
+                    href="#" 
                     className="block text-lg font-medium text-gray-900 hover:text-accent"
                     onClick={() => setIsMenuOpen(false)}
                   >

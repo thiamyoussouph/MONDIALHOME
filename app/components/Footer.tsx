@@ -12,7 +12,7 @@ const categories = [
 ]
 
 const quickLinks = [
-  { name: 'À Propos', href: '/a-propos' },
+  // { name: 'À Propos', href: '/a-propos' },
   { name: 'Contact', href: '/contact' },
   { name: 'Livraison', href: '/livraison' },
   { name: 'Garantie', href: '/garantie' },
@@ -173,7 +173,7 @@ export default function Footer() {
                 className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-accent focus:border-transparent"
               />
               <button className="bg-accent text-white px-6 py-3 rounded-lg hover:bg-accent/90 transition-colors font-medium">
-                S'abonner
+                S&apos;abonner
               </button>
             </div>
           </div>
