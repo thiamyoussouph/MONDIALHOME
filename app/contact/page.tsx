@@ -29,8 +29,8 @@ const contactInfo = [
     icon: Mail,
     title: 'Email',
     details: [
-      'contact@meubles-senegal.com',
-      'devis@meubles-senegal.com'
+      'contact@mondialehomesn.com',
+      
     ],
     action: 'Envoyer un email'
   },
@@ -38,7 +38,7 @@ const contactInfo = [
     icon: Clock,
     title: 'Horaires d&apos;Ouverture',
     details: [
-      'Lun - Sam: 8h00 - 19h00',
+      'Lun - Sam: 8h00 - 21h00',
       'Dimanche: 9h00 - 17h00',
       'Jours fériés: Fermé'
     ],
@@ -134,7 +134,7 @@ export default function ContactPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:+221XXXXXXXX"
+                href="tel:+221784514040"
                 className="inline-flex items-center justify-center bg-accent text-white px-8 py-4 rounded-lg hover:bg-accent/90 transition-colors font-semibold text-lg"
               >
                 <Phone className="w-5 h-5 mr-2" />

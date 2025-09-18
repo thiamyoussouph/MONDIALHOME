@@ -37,7 +37,7 @@ export default function Footer() {
                 <span className="text-white font-bold text-xl">M</span>
               </div>
               <div>
-                <h3 className="text-2xl font-bold">Meubles Sénégal</h3>
+                <h3 className="text-2xl font-bold">Mondiale Home</h3>
                 <p className="text-accent text-sm">Qualité & Design</p>
               </div>
             </div>
@@ -113,7 +113,7 @@ export default function Footer() {
                 <div>
                   <p className="font-medium">Adresse</p>
                   <p className="text-gray-300 text-sm">
-                    Rue de la République<br />
+                  Parcelle en face de l&arrêt BRT Police Parcelles <br />
                     Dakar, Sénégal
                   </p>
                 </div>

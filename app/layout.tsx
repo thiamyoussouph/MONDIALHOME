@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr" className="scroll-smooth">
+    <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -62,7 +62,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} antialiased bg-gray-50 text-gray-900`}>
+      <body className={`${inter.className} antialiased bg-gray-50 text-gray-900`} suppressHydrationWarning>
         <Header />
         <main className="min-h-screen">
           {children}
