@@ -52,7 +52,7 @@ const categories = [
     id: 6,
     name: 'Meuble Télé',
     slug: 'meuble-tele',
-    image: '/images/meuble-tv.jpg',
+    image: '/images/meubletele.jpg',
     description: 'Meubles TV modernes et pratiques',
     productCount: 18
   },

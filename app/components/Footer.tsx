@@ -140,7 +140,7 @@ export default function Footer() {
                     href="mailto:contact@mondialehomesn.com"
                     className="text-gray-300 text-sm hover:text-accent transition-colors"
                   >
-                    contact@mondialehomesn.com
+                    senmondialhome@gmail.com
                   </a>
                 </div>
               </div>
