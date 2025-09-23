@@ -1,44 +1,11 @@
-// app/categories/[slug]/page.tsx
+// app/produits/page.tsx
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Filter, Grid, List, Star, Heart, ShoppingCart, ChevronDown, ArrowLeft, Eye, Plus } from 'lucide-react'
-
-interface PageProps {
-  params: Promise<{ slug: string }>
-}
-
-type CategoryData = {
-  name: string
-  description: string
-  hero: string
-}
-
-const categoryData = {
-  'salon-salle-manger': {
-    name: 'Salon & Salle à Manger',
-    description: 'Découvrez notre collection de meubles pour salon et salle à manger',
-    hero: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&h=600&fit=crop'
-  },
-  'chambre-coucher': {
-    name: 'Chambre à Coucher', 
-    description: 'Meubles de chambre pour un confort optimal',
-    hero: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&h=600&fit=crop'
-  },
-  'bureau': {
-    name: 'Meubles de Bureau',
-    description: 'Créez votre espace de travail idéal',
-    hero: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&h=600&fit=crop'
-  },
-  'tables-chaises': {
-    name: 'Tables & Chaises',
-    description: 'Tables et chaises pour tous vos besoins',
-    hero: 'https://images.unsplash.com/photo-1549497538-303791108f95?w=1200&h=600&fit=crop'
-  }
-}
+import { Filter, Grid, List, Star, Heart, ShoppingCart, ArrowLeft, Eye } from 'lucide-react'
 
 const allProducts = [
   {
@@ -148,6 +115,7 @@ const allProducts = [
 ]
 
 const filters = {
+  categories: ['Salon', 'Chambre', 'Bureau', 'Salle à Manger'],
   priceRanges: [
     { label: 'Moins de 200 000 CFA', min: 0, max: 200000 },
     { label: '200 000 - 300 000 CFA', min: 200000, max: 300000 },
@@ -156,32 +124,20 @@ const filters = {
   ]
 }
 
-export default function CategoryPage({ params }: PageProps) {
-  const [slug, setSlug] = useState<string>('')
-  const [category, setCategory] = useState<CategoryData | null>(null)
+export default function ProduitsPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [sortBy, setSortBy] = useState('popular')
   const [showFilters, setShowFilters] = useState(false)
   const [selectedPriceRange, setSelectedPriceRange] = useState<string>('')
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [selectedRating, setSelectedRating] = useState<number | null>(null)
+  const [inStockOnly, setInStockOnly] = useState(false)
+  const [promoOnly, setPromoOnly] = useState(false)
+  const [productsToShow, setProductsToShow] = useState(6)
 
-  useEffect(() => {
-    params.then((resolvedParams) => {
-      setSlug(resolvedParams.slug)
-      setCategory(categoryData[resolvedParams.slug as keyof typeof categoryData])
-    })
-  }, [params])
+  let filteredProducts = [...allProducts]
 
-  if (!slug || !category) {
-    return (
-      <div className="pt-24 min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-indigo-200 border-t-indigo-600"></div>
-      </div>
-    )
-  }
-
-  const categoryProducts = allProducts.filter(product => product.slug === slug)
-  let filteredProducts = categoryProducts
-
+  // Filtre par prix
   if (selectedPriceRange) {
     const priceRange = filters.priceRanges.find(range => range.label === selectedPriceRange)
     if (priceRange) {
@@ -191,6 +147,29 @@ export default function CategoryPage({ params }: PageProps) {
     }
   }
 
+  // Filtre par catégories
+  if (selectedCategories.length > 0) {
+    filteredProducts = filteredProducts.filter(product => 
+      selectedCategories.includes(product.category)
+    )
+  }
+
+  // Filtre par note
+  if (selectedRating) {
+    filteredProducts = filteredProducts.filter(product => product.rating >= selectedRating)
+  }
+
+  // Filtre en stock uniquement
+  if (inStockOnly) {
+    filteredProducts = filteredProducts.filter(product => product.inStock)
+  }
+
+  // Filtre promotion uniquement
+  if (promoOnly) {
+    filteredProducts = filteredProducts.filter(product => product.badge === 'Promo')
+  }
+
+  // Tri
   switch (sortBy) {
     case 'price-asc':
       filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price)
@@ -205,14 +184,35 @@ export default function CategoryPage({ params }: PageProps) {
       break
   }
 
+  // Limiter le nombre de produits affichés
+  const displayedProducts = filteredProducts.slice(0, productsToShow)
+  const hasMoreProducts = filteredProducts.length > productsToShow
+
+  const resetFilters = () => {
+    setSelectedPriceRange('')
+    setSelectedCategories([])
+    setSelectedRating(null)
+    setInStockOnly(false)
+    setPromoOnly(false)
+    setProductsToShow(6)
+  }
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    )
+  }
+
   return (
     <div className="pt-20">
-      {/* Hero moderne avec gradient overlay */}
+      {/* Hero Section */}
       <section className="relative h-80 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src={category.hero}
-            alt={category.name}
+            src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&h=600&fit=crop"
+            alt="Tous nos produits"
             fill
             className="object-cover opacity-30"
             priority
@@ -231,23 +231,23 @@ export default function CategoryPage({ params }: PageProps) {
                 <span className="text-sm font-medium">Retour à l'accueil</span>
               </Link>
               <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                {category.name}
+                Tous nos Meubles
               </h1>
               <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-                {category.description}
+                Découvrez notre collection complète de meubles de qualité
               </p>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Section produits avec background moderne */}
+      {/* Section produits */}
       <section className="py-16 bg-gradient-to-br from-gray-50 via-white to-indigo-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="lg:grid lg:grid-cols-5 lg:gap-8">
             
-            {/* Filtres avec design moderne */}
+            {/* Filtres */}
             <div className={`lg:col-span-1 ${showFilters ? 'block' : 'hidden lg:block'} mb-8 lg:mb-0`}>
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
@@ -256,10 +256,11 @@ export default function CategoryPage({ params }: PageProps) {
                 className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-6 sticky top-8"
               >
                 <h3 className="text-xl font-bold mb-6 text-gray-800 flex items-center">
-                  <Filter className="w-5 h-5 mr-2 text-indigo-600" />
+                  <Filter className="w-5 h-5 mr-2 text-accent" />
                   Filtres
                 </h3>
                 
+                {/* Filtre par Prix */}
                 <div className="mb-8">
                   <h4 className="font-semibold mb-4 text-gray-700 text-sm uppercase tracking-wide">Gamme de Prix</h4>
                   <div className="space-y-3">
@@ -271,7 +272,7 @@ export default function CategoryPage({ params }: PageProps) {
                           value={range.label}
                           checked={selectedPriceRange === range.label}
                           onChange={(e) => setSelectedPriceRange(e.target.value)}
-                          className="text-indigo-600 focus:ring-indigo-500 focus:ring-2"
+                          className="text-accent focus:ring-accent focus:ring-2"
                         />
                         <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
                           {range.label}
@@ -281,11 +282,84 @@ export default function CategoryPage({ params }: PageProps) {
                   </div>
                 </div>
 
+                {/* Filtre par Catégorie */}
+                <div className="mb-8">
+                  <h4 className="font-semibold mb-4 text-gray-700 text-sm uppercase tracking-wide">Catégories</h4>
+                  <div className="space-y-3">
+                    {filters.categories.map((category, index) => (
+                      <label key={index} className="flex items-center group cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(category)}
+                          onChange={() => toggleCategory(category)}
+                          className="text-accent focus:ring-accent focus:ring-2 rounded"
+                        />
+                        <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                          {category}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Filtre par Note */}
+                <div className="mb-8">
+                  <h4 className="font-semibold mb-4 text-gray-700 text-sm uppercase tracking-wide">Note minimum</h4>
+                  <div className="space-y-3">
+                    {[4.5, 4.0, 3.5, 3.0].map((rating, index) => (
+                      <label key={index} className="flex items-center group cursor-pointer">
+                        <input
+                          type="radio"
+                          name="rating"
+                          checked={selectedRating === rating}
+                          onChange={() => setSelectedRating(selectedRating === rating ? null : rating)}
+                          className="text-accent focus:ring-accent focus:ring-2"
+                        />
+                        <div className="ml-3 flex items-center">
+                          <Star className="w-4 h-4 text-amber-400 fill-current" />
+                          <span className="ml-1 text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                            {rating} & plus
+                          </span>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Filtre par Disponibilité */}
+                <div className="mb-8">
+                  <h4 className="font-semibold mb-4 text-gray-700 text-sm uppercase tracking-wide">Disponibilité</h4>
+                  <div className="space-y-3">
+                    <label className="flex items-center group cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={inStockOnly}
+                        onChange={(e) => setInStockOnly(e.target.checked)}
+                        className="text-indigo-600 focus:ring-indigo-500 focus:ring-2 rounded"
+                      />
+                      <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                        En stock seulement
+                      </span>
+                    </label>
+                    <label className="flex items-center group cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={promoOnly}
+                        onChange={(e) => setPromoOnly(e.target.checked)}
+                        className="text-indigo-600 focus:ring-indigo-500 focus:ring-2 rounded"
+                      />
+                      <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                        En promotion
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
                 <button 
-                  onClick={() => setSelectedPriceRange('')}
+                  onClick={resetFilters}
                   className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
-                  Réinitialiser
+                  Réinitialiser tous les filtres
                 </button>
               </motion.div>
             </div>
@@ -293,7 +367,7 @@ export default function CategoryPage({ params }: PageProps) {
             {/* Produits */}
             <div className="lg:col-span-4">
               
-              {/* Toolbar moderne */}
+              {/* Toolbar */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -302,8 +376,8 @@ export default function CategoryPage({ params }: PageProps) {
               >
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-xl border border-white/20">
                   <h2 className="text-2xl font-bold text-gray-800">
-                    <span className="text-3xl font-extrabold text-indigo-600">{filteredProducts.length}</span>
-                    <span className="ml-2 text-gray-600">produits disponibles</span>
+                    <span className="text-3xl font-extrabold text-indigo-600">{displayedProducts.length}</span>
+                    <span className="ml-2 text-gray-600">sur {filteredProducts.length} produits</span>
                   </h2>
                 </div>
 
@@ -352,119 +426,103 @@ export default function CategoryPage({ params }: PageProps) {
                 </div>
               </motion.div>
 
-              {/* Cartes produits modernes */}
+              {/* Cartes produits avec le modèle exact */}
               <div className={`grid gap-8 ${viewMode === 'grid' ? 'md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
-                {filteredProducts.map((product, index) => (
-                  <motion.div
+                {displayedProducts.map((product, index) => (
+                  <motion.article
                     key={product.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: index * 0.2 }}
+                    viewport={{ once: true }}
                     className="group"
                   >
-                    <div className="bg-white/80 backdrop-blur-sm rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 border border-white/20">
-                      
-                      {/* Image avec overlay moderne */}
+                    <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 border border-gray-100 hover:border-accent/30 transform hover:-translate-y-2">
+
+                      {/* Image section */}
                       <div className="relative h-64 overflow-hidden">
                         <Image
-                          src={product.image}
+                          src={product.image || "/images/placeholder-product.jpg"}
                           alt={product.name}
                           fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          className="object-cover group-hover:scale-110 transition-transform duration-1000"
                         />
-                        
-                        {/* Gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        
-                        {/* Badge moderne */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
                         {product.badge && (
-                          <div className="absolute top-4 left-4">
-                            <span className={`px-3 py-1.5 text-xs font-bold rounded-full text-white shadow-lg backdrop-blur-sm ${
-                              product.badge === 'Promo' ? 'bg-gradient-to-r from-red-500 to-pink-500' :
-                              product.badge === 'Nouveau' ? 'bg-gradient-to-r from-blue-500 to-cyan-500' : 'bg-gradient-to-r from-green-500 to-emerald-500'
-                            }`}>
+                          <div className="absolute top-4 right-4">
+                            <span className="bg-white/95 backdrop-blur-sm text-gray-800 px-3 py-2 text-xs font-bold rounded-full shadow-lg">
                               {product.badge}
                             </span>
                           </div>
                         )}
-
-                        {/* Actions overlay */}
-                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                          <div className="flex flex-col space-y-2">
-                            <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110">
-                              <Heart className="w-5 h-5" />
-                            </button>
-                            <button className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-indigo-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110">
-                              <Eye className="w-5 h-5" />
-                            </button>
-                          </div>
-                        </div>
                       </div>
 
-                      {/* Contenu avec design moderne */}
-                      <div className="p-6">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs text-indigo-600 font-semibold uppercase tracking-wide bg-indigo-50 px-2 py-1 rounded-lg">
-                            {product.category}
-                          </span>
-                          <div className="flex items-center bg-yellow-50 px-2 py-1 rounded-lg">
-                            <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                            <span className="text-sm font-semibold ml-1 text-yellow-700">{product.rating}</span>
-                            <span className="text-xs text-yellow-600 ml-1">({product.reviews})</span>
-                          </div>
-                        </div>
-                        
-                        <h3 className="font-bold text-lg text-gray-900 mb-3 group-hover:text-indigo-700 transition-colors duration-300">
-                          {product.name}
-                        </h3>
-                        
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-baseline space-x-2">
-                            <span className="text-2xl font-bold text-gray-900">
-                              {product.price.toLocaleString()}
+                      {/* Contenu */}
+                      <div className="p-8">
+                        <div className="space-y-4">
+                          <div>
+                            <span className="text-xs text-accent font-bold uppercase tracking-wider">
+                              {product.category}
                             </span>
-                            <span className="text-sm text-gray-500 font-medium">CFA</span>
-                            {product.originalPrice && (
-                              <span className="text-sm text-gray-400 line-through ml-2">
-                                {product.originalPrice.toLocaleString()}
-                              </span>
-                            )}
+                            <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-accent transition-colors leading-tight">
+                              {product.name}
+                            </h3>
+                            <p className="text-gray-600 mt-3 leading-relaxed text-sm">
+                              Meuble de qualité supérieure pour votre intérieur
+                            </p>
                           </div>
-                          {product.originalPrice && (
-                            <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                              -{Math.round((1 - product.price / product.originalPrice) * 100)}%
-                            </span>
-                          )}
-                        </div>
 
-                        <div className="flex items-center justify-between">
-                          <span className={`text-sm font-semibold px-3 py-1 rounded-full ${
-                            product.inStock 
-                              ? 'text-green-700 bg-green-100' 
-                              : 'text-red-700 bg-red-100'
-                          }`}>
-                            {product.inStock ? '✓ En stock' : '✗ Rupture'}
-                          </span>
-                          <div className="flex space-x-2">
+                          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div className="space-y-1">
+                              <div className="text-2xl font-bold text-gray-900">
+                                {product.price?.toLocaleString()}
+                                <span className="text-sm text-gray-500 ml-1 font-medium">CFA</span>
+                              </div>
+                              {product.originalPrice && (
+                                <div className="text-sm text-gray-400 line-through">
+                                  {product.originalPrice.toLocaleString()} CFA
+                                </div>
+                              )}
+                              <div className="flex items-center space-x-1">
+                                <Star className="w-4 h-4 text-amber-400 fill-current" />
+                                <span className="text-sm font-bold text-gray-600">{product.rating}</span>
+                                <span className="text-xs text-gray-500">({product.reviews} avis)</span>
+                              </div>
+                            </div>
+
                             <Link
                               href={`/produits/${product.id}`}
-                              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                              className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:border-accent hover:text-accent hover:bg-accent/5 transition-all duration-300 font-bold text-sm"
                             >
-                              Voir détails
+                              Voir Plus
                             </Link>
-                            <button className="bg-white border-2 border-gray-200 text-gray-600 px-3 py-2 rounded-xl text-sm hover:border-indigo-300 hover:text-indigo-600 transition-all duration-300 shadow-md hover:shadow-lg">
-                              <ShoppingCart className="w-4 h-4" />
-                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </motion.div>
+                  </motion.article>
                 ))}
               </div>
 
-              {/* Aucun résultat avec design moderne */}
-              {filteredProducts.length === 0 && (
+              {/* Bouton "Voir plus" */}
+              {hasMoreProducts && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center mt-12"
+                >
+                  <button
+                    onClick={() => setProductsToShow(prev => prev + 6)}
+                    className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  >
+                    Voir plus de produits ({filteredProducts.length - productsToShow} restants)
+                  </button>
+                </motion.div>
+              )}
+
+              {/* Aucun résultat */}
+              {displayedProducts.length === 0 && (
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -477,7 +535,7 @@ export default function CategoryPage({ params }: PageProps) {
                     <h3 className="text-2xl font-bold mb-3 text-gray-800">Aucun produit trouvé</h3>
                     <p className="text-gray-600 mb-6 leading-relaxed">Aucun produit ne correspond à vos critères de recherche actuels</p>
                     <button 
-                      onClick={() => setSelectedPriceRange('')}
+                      onClick={resetFilters}
                       className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                     >
                       Réinitialiser les filtres

@@ -9,35 +9,84 @@ import HeroCarousel from './components/HeroCarousel'
 const categories = [
   {
     id: 1,
-    name: 'Salon & Salle à Manger',
-    slug: 'salon-salle-manger',
-    image: '/images/salon.jpeg',
-    description: 'Canapés, tables, chaises élégantes',
+    name: 'Chambre à Coucher',
+    slug: 'chambre-coucher',
+    image: '/images/chambreacoucher.jpeg',
+    description: 'Lits, armoires, commodes design',
     productCount: 45
   },
   {
     id: 2,
-    name: 'Chambre à Coucher',
-    slug: 'chambre-coucher',
-    image: '/images/chambre-preview.jpg',
-    description: 'Lits, armoires, commodes design',
-    productCount: 32
+    name: 'Salons Modernes',
+    slug: 'salons-modernes',
+    image: '/images/salon3.jpeg',
+    description: 'Canapés contemporains, design épuré',
+    productCount: 38
   },
   {
     id: 3,
-    name: 'Meubles de Bureau',
-    slug: 'bureau',
-    image: '/images/bureau-preview.jpg',
-    description: 'Bureaux, chaises, rangements',
+    name: 'Salons Royaux - Louis XIV',
+    slug: 'salons-royaux',
+    image: '/images/luisviton.jpeg',
+    description: 'Style classique, luxe et raffinement',
     productCount: 28
   },
   {
     id: 4,
-    name: 'Tables & Chaises',
-    slug: 'tables-chaises',
-    image: '/images/tables-preview.jpg',
-    description: 'Tables à manger, chaises confort',
-    productCount: 38
+    name: 'Salle à Manger',
+    slug: 'salle-manger',
+    image: '/images/tables3.jpeg',
+    description: 'Tables, chaises, buffets élégants',
+    productCount: 32
+
+  },
+  {
+    id: 5,
+    name: 'Table Basse',
+    slug: 'table-basse',
+    image: '/images/tables.jpeg',
+    description: 'Tables basses design et fonctionnelles',
+    productCount: 24
+  },
+  {
+    id: 6,
+    name: 'Meuble Télé',
+    slug: 'meuble-tele',
+    image: '/images/meuble-tv.jpg',
+    description: 'Meubles TV modernes et pratiques',
+    productCount: 18
+  },
+  {
+    id: 7,
+    name: 'Matelas Orthopédiques',
+    slug: 'matelas',
+    image: '/images/matelas.jpeg',
+    description: 'Confort et soutien pour votre sommeil',
+    productCount: 15
+  },
+  {
+    id: 8,
+    name: 'Portes Intérieures',
+    slug: 'portes-interieures',
+    image: '/images/porteblindé.jpeg',
+    description: 'Portes design pour votre intérieur',
+    productCount: 22
+  },
+  {
+    id: 9,
+    name: 'Portes Blindées',
+    slug: 'portes-blindees',
+    image: '/images/port.jpeg',
+    description: 'Sécurité et esthétique réunies',
+    productCount: 12
+  },
+  {
+    id: 10,
+    name: 'Tapis',
+    slug: 'tapis',
+    image: '/images/tapis.jpg',
+    description: 'Tapis décoratifs et confortables',
+    productCount: 35
   }
 ]
 
@@ -47,7 +96,7 @@ const featuredProducts = [
     name: 'Canapé 3 Places Premium',
     price: 450000,
     originalPrice: 520000,
-    image: '/images/salon.jpeg',
+    image: '/images/image4.jpeg',
     category: 'Salon',
     rating: 4.8,
     badge: 'Bestseller',
@@ -99,7 +148,7 @@ const featuredProducts = [
     name: 'Chambre à Coucher',
     price: 320000,
     originalPrice: 380000,
-    image: '/images/chambre.jpeg',
+    image: '/images/chambreacoucher.jpeg',
     category: 'Chambre',
     rating: 4.8,
     badge: 'Premium',
@@ -141,214 +190,248 @@ export default function HomePage() {
 
       {/* Categories Section */}
       <section className="py-24 bg-gradient-to-b from-white to-gray-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <span className="inline-block bg-accent/10 text-accent px-6 py-2 rounded-full text-sm font-semibold mb-6 uppercase tracking-wide">
-              Notre Collection
-            </span>
-            <h2 className="text-5xl font-bold text-primary mb-6 leading-tight">
-              Explorez Nos
-              <span className="block text-accent">Univers</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Chaque catégorie reflète notre passion pour le design et notre engagement
-              envers la qualité exceptionnelle
-            </p>
-          </motion.div>
+    {/* Header */}
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+      className="text-center mb-20"
+    >
+      <span className="inline-block bg-accent/10 text-accent px-6 py-2 rounded-full text-sm font-semibold mb-6 uppercase tracking-wide">
+        Notre Collection
+      </span>
+      <h2 className="text-5xl font-bold text-primary mb-6 leading-tight">
+        Explorez Nos
+        <span className="block text-accent">Univers</span>
+      </h2>
+      <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        Chaque catégorie reflète notre passion pour le design et notre engagement
+        envers la qualité exceptionnelle
+      </p>
+    </motion.div>
 
-          {/* Categories Grid - Layout Amélioré */}
-          <div className="grid lg:grid-cols-2 gap-8 mb-16">
+    {/* SOLUTION 1: Grille Uniforme 3 Colonnes */}
+    <div className="grid lg:grid-cols-3 gap-8 mb-16">
+      {categories.map((category, index) => (
+        <motion.div
+          key={category.id}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: index * 0.1 }}
+          viewport={{ once: true }}
+        >
+          <Link href={`/categories/${category.slug}`}>
+            <div className="group relative h-80 bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 border border-gray-100 hover:border-accent/30">
 
-            {/* Catégorie Principale - Grande */}
+              {/* Background Image */}
+              <div className="absolute inset-0">
+                <Image
+                  src={category.image}
+                  alt={category.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              </div>
+
+              {/* Badge pour la première catégorie */}
+              {index === 0 && (
+                <div className="absolute top-4 left-4">
+                  <span className="bg-accent text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+                    Collection Phare
+                  </span>
+                </div>
+              )}
+
+              {/* Compteur */}
+              <div className="absolute top-4 right-4">
+                <div className="bg-white/95 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+                  {category.productCount} produits
+                </div>
+              </div>
+
+              {/* Contenu */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="text-xl font-bold mb-2">{category.name}</h3>
+                <p className="text-sm text-white/90 mb-4 line-clamp-2">
+                  {category.description}
+                </p>
+                <div className="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform duration-300">
+                  <span className="mr-2 text-sm">Découvrir</span>
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </Link>
+        </motion.div>
+      ))}
+    </div>
+
+    {/* ALTERNATIVE: Mise en page 2+2 si vous avez exactement 4 catégories */}
+    {categories.length === 4 && (
+      <div className="hidden">
+        <div className="grid lg:grid-cols-2 gap-8 mb-8">
+          {/* Première rangée - 2 catégories principales */}
+          {categories.slice(0, 2).map((category, index) => (
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              key={category.id}
+              initial={{ opacity: 0, x: index === 0 ? -30 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="lg:row-span-2"
             >
-              <Link href={`/categories/${categories[0].slug}`}>
-                <div className="group relative h-full min-h-[500px] bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 border border-gray-100 hover:border-accent/30">
-
-                  {/* Background Image */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 group-hover:from-accent/10 group-hover:to-primary/10 transition-all duration-700">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-32 h-32 bg-accent/10 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:bg-accent/20 transition-colors duration-500">
-                          <span className="text-6xl">🛋️</span>
-                        </div>
-                        <h3 className="text-2xl font-bold text-gray-400">Image Showroom</h3>
+              <Link href={`/categories/${category.slug}`}>
+                <div className="group relative h-64 bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700">
+                  <div className="absolute inset-0">
+                    <Image
+                      src={index === 0 ? "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=400&fit=crop" :
+                            "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=400&fit=crop"}
+                      alt={category.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  </div>
+                  
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-2xl font-bold mb-2">{category.name}</h3>
+                    <p className="text-white/90 mb-4">{category.description}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm bg-white/20 px-3 py-1 rounded-full">
+                        {category.productCount} produits
+                      </span>
+                      <div className="flex items-center group-hover:translate-x-2 transition-transform duration-300">
+                        <span className="mr-2">Voir</span>
+                        <ArrowRight className="w-4 h-4" />
                       </div>
-                    </div>
-                  </div>
-
-                  {/* Badge Premium */}
-                  <div className="absolute top-6 left-6">
-                    <span className="bg-accent text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                      Collection Phare
-                    </span>
-                  </div>
-
-                  {/* Compteur Produits */}
-                  <div className="absolute top-6 right-6">
-                    <div className="bg-white/95 backdrop-blur-sm text-gray-800 px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                      {categories[0].productCount} modèles
-                    </div>
-                  </div>
-
-                  {/* Contenu Bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent text-white">
-                    <h3 className="text-3xl font-bold mb-3">
-                      {categories[0].name}
-                    </h3>
-                    <p className="text-lg text-white/90 mb-6">
-                      {categories[0].description}
-                    </p>
-                    <div className="flex items-center text-white font-semibold group-hover:translate-x-2 transition-transform duration-300">
-                      <span className="mr-3">Découvrir la collection</span>
-                      <ArrowRight className="w-5 h-5" />
                     </div>
                   </div>
                 </div>
               </Link>
             </motion.div>
+          ))}
+        </div>
 
-            {/* Catégories Secondaires */}
-            <div className="space-y-8">
-              {categories.slice(1).map((category, index) => (
-                <motion.div
-                  key={category.id}
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <Link href={`/categories/${category.slug}`}>
-                    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-accent/20 overflow-hidden">
-
-                      <div className="flex items-center p-6">
-
-                        {/* Icon Section */}
-                        <div className="flex-shrink-0 mr-6">
-                          <div className="w-20 h-20 bg-gradient-to-br from-accent/10 to-accent/5 rounded-2xl flex items-center justify-center group-hover:from-accent group-hover:to-accent/80 transition-all duration-500">
-                            <span className="text-3xl">
-                              {category.id === 2 ? '🛏️' :
-                                category.id === 3 ? '💼' : '🪑'}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Content Section */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-xl font-bold text-primary group-hover:text-accent transition-colors">
-                              {category.name}
-                            </h3>
-                            <span className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                              {category.productCount} produits
-                            </span>
-                          </div>
-                          <p className="text-gray-600 mb-4 leading-relaxed">
-                            {category.description}
-                          </p>
-                          <div className="flex items-center text-accent font-medium group-hover:translate-x-2 transition-transform duration-300">
-                            <span className="mr-2">Explorer</span>
-                            <ArrowRight className="w-4 h-4" />
-                          </div>
-                        </div>
+        {/* Deuxième rangée - 2 catégories secondaires */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-16">
+          {categories.slice(2).map((category, index) => (
+            <motion.div
+              key={category.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              viewport={{ once: true }}
+            >
+              <Link href={`/categories/${category.slug}`}>
+                <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 p-6 border border-gray-100 hover:border-accent/20">
+                  <div className="flex items-center">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden mr-4 flex-shrink-0">
+                      <Image
+                        src={category.image}
+                        alt={category.name}
+                        width={64}
+                        height={64}
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-primary group-hover:text-accent transition-colors mb-1">
+                        {category.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-2">{category.description}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500">{category.productCount} produits</span>
+                        <ArrowRight className="w-4 h-4 text-accent group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Section Services */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="bg-white rounded-3xl shadow-xl p-8 lg:p-12"
-          >
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold text-primary mb-4">
-                Services Inclus
-              </h3>
-              <p className="text-lg text-gray-600">
-                Une expérience complète pour votre satisfaction
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: "🚚",
-                  title: "Livraison Gratuite",
-                  description: "À Dakar et banlieue"
-                },
-                {
-                  icon: "🔧",
-                  title: "Installation Comprise",
-                  description: "Par nos équipes expertes"
-                },
-                {
-                  icon: "🛡️",
-                  title: "Garantie 2 Ans",
-                  description: "Sur tous nos produits"
-                }
-              ].map((service, index) => (
-                <div key={index} className="text-center group">
-                  <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent transition-colors duration-300">
-                    <span className="text-2xl">{service.icon}</span>
                   </div>
-                  <h4 className="text-lg font-semibold text-primary mb-2 group-hover:text-accent transition-colors">
-                    {service.title}
-                  </h4>
-                  <p className="text-gray-600">
-                    {service.description}
-                  </p>
                 </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Call to Action Final */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mt-16"
-          >
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Link
-                href="/produits"
-                className="inline-flex items-center px-10 py-4 bg-primary text-white rounded-2xl hover:bg-primary/90 transition-colors font-semibold text-lg shadow-lg hover:shadow-xl"
-              >
-                Voir Tous les Produits
-                <ArrowRight className="ml-3 w-5 h-5" />
               </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center px-10 py-4 border-2 border-primary text-primary rounded-2xl hover:bg-primary hover:text-white transition-colors font-semibold text-lg"
-              >
-                Conseil Personnalisé
-              </Link>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
-      </section>
+      </div>
+    )}
 
+    {/* Section Services */}
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.4 }}
+      viewport={{ once: true }}
+      className="bg-white rounded-3xl shadow-xl p-8 lg:p-12"
+    >
+      <div className="text-center mb-12">
+        <h3 className="text-3xl font-bold text-primary mb-4">
+          Services Inclus
+        </h3>
+        <p className="text-lg text-gray-600">
+          Une expérience complète pour votre satisfaction
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-8">
+        {[
+          {
+            icon: "🚚",
+            title: "Livraison Gratuite",
+            description: "À Dakar et banlieue"
+          },
+          {
+            icon: "🔧",
+            title: "Installation Comprise",
+            description: "Par nos équipes expertes"
+          },
+          {
+            icon: "🛡️",
+            title: "Garantie 2 Ans",
+            description: "Sur tous nos produits"
+          }
+        ].map((service, index) => (
+          <div key={index} className="text-center group">
+            <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent transition-colors duration-300">
+              <span className="text-2xl">{service.icon}</span>
+            </div>
+            <h4 className="text-lg font-semibold text-primary mb-2 group-hover:text-accent transition-colors">
+              {service.title}
+            </h4>
+            <p className="text-gray-600">
+              {service.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+
+    {/* Call to Action Final */}
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.6 }}
+      viewport={{ once: true }}
+      className="text-center mt-16"
+    >
+      <div className="flex flex-col sm:flex-row gap-6 justify-center">
+        <Link
+          href="/produits"
+          className="inline-flex items-center px-10 py-4 bg-primary text-white rounded-2xl hover:bg-primary/90 transition-colors font-semibold text-lg shadow-lg hover:shadow-xl"
+        >
+          Voir Tous les Produits
+          <ArrowRight className="ml-3 w-5 h-5" />
+        </Link>
+        <Link
+          href="/contact"
+          className="inline-flex items-center px-10 py-4 border-2 border-primary text-primary rounded-2xl hover:bg-primary hover:text-white transition-colors font-semibold text-lg"
+        >
+          Conseil Personnalisé
+        </Link>
+      </div>
+    </motion.div>
+  </div>
+</section>
       {/* Featured Products Section */}
       {/* Showroom Products Section - Design Élégant */}
       {/* Showroom Section - Design Réorganisé et Embelli */}
@@ -418,7 +501,7 @@ export default function HomePage() {
                 {/* Badges flottants */}
                 <div className="absolute top-8 left-8 flex flex-col space-y-4">
                   <div className="bg-white/95 backdrop-blur-xl text-gray-800 px-6 py-3 rounded-2xl shadow-2xl border border-white/30">
-                    <span className="text-sm font-bold">{featuredProducts[0].badge}</span>
+                    <span className="text-sm font-bold">{featuredProducts[4].badge}</span>
                   </div>
                   <div className="bg-accent/95 backdrop-blur-xl text-white px-6 py-3 rounded-2xl shadow-2xl">
                     <span className="text-sm font-bold">Pièce Signature</span>
@@ -432,25 +515,25 @@ export default function HomePage() {
 
                       <div className="space-y-4">
                         <span className="inline-block text-accent bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold">
-                          {featuredProducts[0].category}
+                          {featuredProducts[4].category}
                         </span>
                         <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
-                          {featuredProducts[0].name}
+                          {featuredProducts[4].name}
                         </h2>
                         <p className="text-xl text-white/90 max-w-3xl leading-relaxed">
-                          {featuredProducts[0].description}
+                          {featuredProducts[4].description}
                         </p>
                       </div>
 
                       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                         <div className="flex items-center space-x-6">
                           <div className="text-4xl font-bold">
-                            {featuredProducts[0].price?.toLocaleString()} CFA
+                            {featuredProducts[4].price?.toLocaleString()} CFA
                           </div>
                           <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                             <Star className="w-5 h-5 text-amber-400 fill-current" />
-                            <span className="font-bold">{featuredProducts[0].rating}</span>
-                            <span className="text-sm opacity-80">({featuredProducts[0].reviewCount})</span>
+                            <span className="font-bold">{featuredProducts[4].rating}</span>
+                            <span className="text-sm opacity-80">({featuredProducts[4].reviewCount})</span>
                           </div>
                         </div>
 

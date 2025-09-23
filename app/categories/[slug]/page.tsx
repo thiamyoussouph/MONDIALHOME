@@ -21,12 +21,12 @@ const categoryData = {
   'salon-salle-manger': {
     name: 'Salon & Salle à Manger',
     description: 'Découvrez notre collection de meubles pour salon et salle à manger',
-    hero: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&h=600&fit=crop'
+    hero: '/images/salon4.jpeg'
   },
   'chambre-coucher': {
     name: 'Chambre à Coucher', 
     description: 'Meubles de chambre pour un confort optimal',
-    hero: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&h=600&fit=crop'
+    hero: '/images/chambreacoucher.jpeg'
   },
   'bureau': {
     name: 'Meubles de Bureau',
@@ -46,7 +46,7 @@ const allProducts = [
     name: 'Canapé 3 Places Moderne',
     price: 450000,
     originalPrice: 520000,
-    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop',
+    image: '/images/salon3.jpeg',
     category: 'Salon',
     slug: 'salon-salle-manger',
     rating: 4.8,
@@ -59,7 +59,7 @@ const allProducts = [
     name: 'Table Basse Design',
     price: 180000,
     originalPrice: null,
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=400&fit=crop',
+    image: '/images/tables3.jpeg',
     category: 'Salon',
     slug: 'salon-salle-manger',
     rating: 4.6,
@@ -72,7 +72,7 @@ const allProducts = [
     name: 'Fauteuil Confort',
     price: 280000,
     originalPrice: 320000,
-    image: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&h=400&fit=crop',
+    image: '/images/feuteil2.jpeg',
     category: 'Salon',
     slug: 'salon-salle-manger',
     rating: 4.9,
@@ -82,10 +82,10 @@ const allProducts = [
   },
   {
     id: 4,
-    name: 'Bibliothèque Moderne',
+    name: 'fauteuils modernes',
     price: 195000,
     originalPrice: null,
-    image: 'https://images.unsplash.com/photo-1594736797933-d0d6019b72a3?w=600&h=400&fit=crop',
+    image: '/images/feuteil1.jpeg',
     category: 'Salon',
     slug: 'salon-salle-manger',
     rating: 4.5,
@@ -111,7 +111,7 @@ const allProducts = [
     name: 'Armoire 3 Portes',
     price: 320000,
     originalPrice: null,
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop',
+    image: '/images/chambreacoucher.jpeg',
     category: 'Chambre',
     slug: 'chambre-coucher',
     rating: 4.6,
@@ -144,7 +144,59 @@ const allProducts = [
     reviews: 35,
     badge: null,
     inStock: true
-  }
+  },
+  {
+    id: 9,
+    name: 'Armoire 3 Portes',
+    price: 320000,
+    originalPrice: null,
+    image: '/images/chambreacoucher1.jpeg',
+    category: 'Chambre',
+    slug: 'chambre-coucher',
+    rating: 4.6,
+    reviews: 28,
+    badge: 'Nouveau',
+    inStock: true
+  },
+  {
+    id: 9,
+    name: 'Armoire 3 Portes',
+    price: 320000,
+    originalPrice: null,
+    image: '/images/chambreacoucher2.jpeg',
+    category: 'Chambre',
+    slug: 'chambre-coucher',
+    rating: 4.6,
+    reviews: 28,
+    badge: 'Nouveau',
+    inStock: true
+  },
+  {
+    id: 9,
+    name: 'Armoire 3 Portes',
+    price: 320000,
+    originalPrice: null,
+    image: '/images/chambreacoucher2.jpeg',
+    category: 'Chambre',
+    slug: 'chambre-coucher',
+    rating: 4.6,
+    reviews: 28,
+    badge: 'Nouveau',
+    inStock: true
+  },
+  {
+    id: 2,
+    name: 'Table Basse Design',
+    price: 180000,
+    originalPrice: null,
+    image: '/images/salon2.jpeg',
+    category: 'Salon',
+    slug: 'salon-salle-manger',
+    rating: 4.6,
+    reviews: 18,
+    badge: 'Nouveau',
+    inStock: true
+  },
 ]
 
 const filters = {
