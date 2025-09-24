@@ -1,0 +1,23 @@
+# public/robots.txt
+
+# Permettre tous les bots
+User-agent: *
+Allow: /
+
+# URLs importantes
+Sitemap: https://www.mondialehomesn.com/sitemap.xml
+
+# Bloquer les fichiers sensibles
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+
+# Googlebot spécifique
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
