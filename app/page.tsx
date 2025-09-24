@@ -122,7 +122,7 @@ const featuredProducts = [
     name: 'Lit King Size avec Tête de Lit',
     price: 380000,
     originalPrice: 450000,
-    image: '/images/lit-king.jpg',
+    image: '/images/chambreacoucher3.jpeg',
     category: 'Chambre',
     rating: 4.7,
     badge: 'Promo',
@@ -135,7 +135,7 @@ const featuredProducts = [
     name: 'Bureau Exécutif Modern',
     price: 320000,
     originalPrice: 380000,
-    image: '/images/bureau-executif.jpg',
+    image: '/images/tablesbureaux.jpeg',
     category: 'Bureau',
     rating: 4.8,
     badge: 'Premium',
@@ -157,7 +157,7 @@ const featuredProducts = [
     stock: 15
   }
 
-]
+] 
 
 const benefits = [
   {
