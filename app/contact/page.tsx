@@ -655,7 +655,7 @@ export default function ContactPage() {
               Vous avez d&apos;autres questions ?
             </p>
             <a
-              href="mailto:contact@meubles-senegal.com"
+              href="mailto:senmondialhome@gmail.com"
               className="btn-primary"
             >
               Contactez-nous directement
