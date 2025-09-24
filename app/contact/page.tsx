@@ -20,8 +20,8 @@ const contactInfo = [
     icon: Phone,
     title: 'Téléphone',
     details: [
-      '+221 XX XXX XXXX',
-      '+221 YY YYY YYYY'
+      '+221 78 451 40 40',
+      '+221 78 451 40 40'
     ],
     action: 'Appeler maintenant'
   },
@@ -449,14 +449,14 @@ export default function ContactPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
-                  href="tel:+221XXXXXXXX"
+                  href="tel:+221 78 451 40 40"
                   className="flex items-center justify-center bg-white text-accent px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
                 >
                   <Phone className="w-4 h-4 mr-2" />
                   Appeler
                 </a>
                 <a
-                  href="https://wa.me/221XXXXXXXX"
+                  href="https://wa.me/+221784514040"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-lg hover:bg-white/30 transition-colors font-semibold border border-white/30"
