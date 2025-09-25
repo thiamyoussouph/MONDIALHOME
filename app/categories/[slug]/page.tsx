@@ -57,7 +57,7 @@ const allProducts = [
   {
     id: 2,
     name: 'Table Basse Design',
-    price: 180000,
+    price: null,
     originalPrice: null,
     image: '/images/tables3.jpeg',
     category: 'Salon',
@@ -70,8 +70,8 @@ const allProducts = [
   {
     id: 3,
     name: 'Fauteuil Confort',
-    price: 280000,
-    originalPrice: 320000,
+    price: null,
+    originalPrice: null,
     image: '/images/feuteil2.jpeg',
     category: 'Salon',
     slug: 'salon-salle-manger',
@@ -83,7 +83,7 @@ const allProducts = [
   {
     id: 4,
     name: 'fauteuils modernes',
-    price: 195000,
+    price: null,
     originalPrice: null,
     image: '/images/feuteil1.jpeg',
     category: 'Salon',
@@ -96,8 +96,8 @@ const allProducts = [
   {
     id: 5,
     name: 'Lit King Size',
-    price: 380000,
-    originalPrice: 450000,
+    price: null,
+    originalPrice: null,
     image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop',
     category: 'Chambre',
     slug: 'chambre-coucher',
@@ -109,7 +109,7 @@ const allProducts = [
   {
     id: 6,
     name: 'Armoire 3 Portes',
-    price: 320000,
+    price: null,
     originalPrice: null,
     image: '/images/chambreacoucher.jpeg',
     category: 'Chambre',
@@ -122,7 +122,7 @@ const allProducts = [
   {
     id: 7,
     name: 'Bureau Moderne',
-    price: 250000,
+    price: null,
     originalPrice: null,
     image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop',
     category: 'Bureau',
@@ -135,7 +135,7 @@ const allProducts = [
   {
     id: 8,
     name: 'Table à Manger',
-    price: 380000,
+    price: null,
     originalPrice: null,
     image: 'https://images.unsplash.com/photo-1549497538-303791108f95?w=600&h=400&fit=crop',
     category: 'Salle à Manger',
@@ -148,7 +148,7 @@ const allProducts = [
   {
     id: 9,
     name: 'Armoire 3 Portes',
-    price: 320000,
+    price: null,
     originalPrice: null,
     image: '/images/chambreacoucher1.jpeg',
     category: 'Chambre',
@@ -161,7 +161,7 @@ const allProducts = [
   {
     id: 9,
     name: 'Armoire 3 Portes',
-    price: 320000,
+    price: null,
     originalPrice: null,
     image: '/images/chambreacoucher2.jpeg',
     category: 'Chambre',
@@ -174,7 +174,7 @@ const allProducts = [
   {
     id: 9,
     name: 'Armoire 3 Portes',
-    price: 320000,
+    price: null,
     originalPrice: null,
     image: '/images/chambreacoucher2.jpeg',
     category: 'Chambre',
@@ -187,7 +187,7 @@ const allProducts = [
   {
     id: 2,
     name: 'Table Basse Design',
-    price: 180000,
+    price: null,
     originalPrice: null,
     image: '/images/salon2.jpeg',
     category: 'Salon',
@@ -234,28 +234,28 @@ export default function CategoryPage({ params }: PageProps) {
   const categoryProducts = allProducts.filter(product => product.slug === slug)
   let filteredProducts = categoryProducts
 
-  if (selectedPriceRange) {
-    const priceRange = filters.priceRanges.find(range => range.label === selectedPriceRange)
-    if (priceRange) {
-      filteredProducts = filteredProducts.filter(product => 
-        product.price >= priceRange.min && product.price <= priceRange.max
-      )
-    }
-  }
+  // if (selectedPriceRange) {
+  //   const priceRange = filters.priceRanges.find(range => range.label === selectedPriceRange)
+  //   if (priceRange) {
+  //     filteredProducts = filteredProducts.filter(product => 
+  //       product.price >= priceRange.min && product.price <= priceRange.max
+  //     )
+  //   }
+  // }
 
-  switch (sortBy) {
-    case 'price-asc':
-      filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price)
-      break
-    case 'price-desc':
-      filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price)
-      break
-    case 'rating':
-      filteredProducts = [...filteredProducts].sort((a, b) => b.rating - a.rating)
-      break
-    default:
-      break
-  }
+  // switch (sortBy) {
+  //   case 'price-asc':
+  //     filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price)
+  //     break
+  //   case 'price-desc':
+  //     filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price)
+  //     break
+  //   case 'rating':
+  //     filteredProducts = [...filteredProducts].sort((a, b) => b.rating - a.rating)
+  //     break
+  //   default:
+  //     break
+  // }
 
   return (
     <div className="pt-20">

@@ -42,10 +42,10 @@ const categories = [
   },
   {
     id: 5,
-    name: 'Table Basse',
-    slug: 'table-basse',
+    name: 'Salle à Manger',
+    slug: 'salle-manger',
     image: '/images/tables.jpeg',
-    description: 'Tables basses design et fonctionnelles',
+    description: 'Tables, chaises, buffets élégants',
     productCount: 24
   },
   {
@@ -94,8 +94,8 @@ const featuredProducts = [
   {
     id: 1,
     name: 'Canapé 3 Places Premium',
-    price: 450000,
-    originalPrice: 520000,
+    // price: 450000,
+    // originalPrice: 520000,
     image: '/images/image4.jpeg',
     category: 'Salon',
     rating: 4.8,
@@ -107,8 +107,8 @@ const featuredProducts = [
   {
     id: 2,
     name: 'Table à Manger Extensible',
-    price: 280000,
-    originalPrice: 320000,
+    // price: 280000,
+    // originalPrice: 320000,
     image: '/images/tables.jpeg',
     category: 'Salle à Manger',
     rating: 4.9,
@@ -120,8 +120,8 @@ const featuredProducts = [
   {
     id: 3,
     name: 'Lit King Size avec Tête de Lit',
-    price: 380000,
-    originalPrice: 450000,
+    // price: 380000,
+    // originalPrice: 450000,
     image: '/images/chambreacoucher3.jpeg',
     category: 'Chambre',
     rating: 4.7,
@@ -133,8 +133,8 @@ const featuredProducts = [
   {
     id: 4,
     name: 'Bureau Exécutif Modern',
-    price: 320000,
-    originalPrice: 380000,
+    // price: 320000,
+    // originalPrice: 380000,
     image: '/images/tablesbureaux.jpeg',
     category: 'Bureau',
     rating: 4.8,
@@ -146,8 +146,8 @@ const featuredProducts = [
   {
     id: 5,
     name: 'Chambre à Coucher',
-    price: 320000,
-    originalPrice: 380000,
+    // price: 320000,
+    // originalPrice: 380000,
     image: '/images/chambreacoucher.jpeg',
     category: 'Chambre',
     rating: 4.8,
@@ -528,7 +528,7 @@ export default function HomePage() {
                       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                         <div className="flex items-center space-x-6">
                           <div className="text-4xl font-bold">
-                            {featuredProducts[4].price?.toLocaleString()} CFA
+                            {/* {featuredProducts[4].price?.toLocaleString()} CFA */}
                           </div>
                           <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                             <Star className="w-5 h-5 text-amber-400 fill-current" />
@@ -600,7 +600,7 @@ export default function HomePage() {
                         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                           <div className="space-y-1">
                             <div className="text-2xl font-bold text-gray-900">
-                              {product.price?.toLocaleString()}
+                              {/* {product.price?.toLocaleString()} */}
                               <span className="text-sm text-gray-500 ml-1 font-medium">CFA</span>
                             </div>
                             <div className="flex items-center space-x-1">
@@ -731,10 +731,10 @@ export default function HomePage() {
                   </div>
                   <div className="space-y-2">
                     <div className="text-3xl font-bold text-accent">Lun-Sam</div>
-                    <div className="text-gray-300">8h-19h • Parking gratuit</div>
+                    <div className="text-gray-300">10h-19h30 • en face de l&apos;arrêt BRT Police Parcelles</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="text-3xl font-bold text-accent">Plateau</div>
+                    <div className="text-3xl font-bold text-accent">Parcelles</div>
                     <div className="text-gray-300">Dakar, Sénégal</div>
                   </div>
                 </div>

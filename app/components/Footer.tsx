@@ -113,7 +113,7 @@ export default function Footer() {
                 <div>
                   <p className="font-medium">Adresse</p>
                   <p className="text-gray-300 text-sm">
-                  Parcelle en face de l&arrêt BRT Police Parcelles <br />
+                  Parcelle en face de l&apos;arrêt BRT Police Parcelles <br />
                     Dakar, Sénégal
                   </p>
                 </div>
@@ -150,8 +150,8 @@ export default function Footer() {
                 <div>
                   <p className="font-medium">Horaires</p>
                   <div className="text-gray-300 text-sm space-y-1">
-                    <p>Lun - Sam: 8h00 - 19h00</p>
-                    <p>Dimanche: 9h00 - 17h00</p>
+                    <p>Lun - Sam: 10h00 - 19h30</p>
+                    {/* <p>Dimanche: 9h00 - 17h00</p> */}
                   </div>
                 </div>
               </div>
