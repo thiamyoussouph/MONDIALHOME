@@ -1,28 +1,33 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X, ChevronDown, Search, Phone } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { categories as allCategories } from '@/lib/categories'
 
-const categories = [
-  { name: 'Salon & Salle à Manger', slug: 'salon-salle-manger' },
-  { name: 'Chambre à Coucher', slug: 'chambre-coucher' },
-  { name: 'Meubles de Bureau', slug: 'bureau' },
-  { name: 'Tables & Chaises', slug: 'tables-chaises' },
-  { name: 'Portes Intérieures', slug: 'portes-interieures' }
-]
+// 👉 On déduplique par slug au cas où (ex: "salle-manger" apparaît 2x)
+function useNavCategories() {
+  return useMemo(() => {
+    const seen = new Set<string>()
+    return allCategories.filter(cat => {
+      if (seen.has(cat.slug)) return false
+      seen.add(cat.slug)
+      return true
+    })
+  }, [])
+}
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
+  const navCategories = useNavCategories()
+
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -36,7 +41,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="hidden md:flex items-center gap-4">
             <span>📍 Dakar, Sénégal</span>
-            <span>⏰ Lun-Sam: 8h-19h</span>
+            <span>⏰ Lun-Sam: 10h-19h30</span>
           </div>
           <div className="flex items-center gap-4">
             <Phone className="w-4 h-4" />
@@ -49,7 +54,6 @@ export default function Header() {
       <nav className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            
             {/* Logo */}
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 relative rounded-full overflow-hidden bg-white">
@@ -69,24 +73,21 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
-              <Link 
-                href="/" 
-                className="text-gray-900 hover:text-accent transition-colors font-medium"
-              >
+              <Link href="/" className="text-gray-900 hover:text-accent transition-colors font-medium">
                 Accueil
               </Link>
-              
+
               {/* Categories Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                  className="flex items-center text-gray-900 hover:text-accent transition-colors font-medium"
                   onMouseEnter={() => setIsCategoriesOpen(true)}
+                  className="flex items-center text-gray-900 hover:text-accent transition-colors font-medium"
                 >
                   Catégories
                   <ChevronDown className="ml-1 w-4 h-4" />
                 </button>
-                
+
                 <AnimatePresence>
                   {isCategoriesOpen && (
                     <motion.div
@@ -97,7 +98,7 @@ export default function Header() {
                       className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2"
                       onMouseLeave={() => setIsCategoriesOpen(false)}
                     >
-                      {categories.map((category) => (
+                      {navCategories.map((category) => (
                         <Link
                           key={category.slug}
                           href={`/categories/${category.slug}`}
@@ -111,17 +112,10 @@ export default function Header() {
                 </AnimatePresence>
               </div>
 
-              <Link 
-                href="/a-propos" 
-                className="text-gray-900 hover:text-accent transition-colors font-medium"
-              >
+              <Link href="/a-propos" className="text-gray-900 hover:text-accent transition-colors font-medium">
                 À Propos
               </Link>
-              
-              <Link 
-                href="/contact" 
-                className="text-gray-900 hover:text-accent transition-colors font-medium"
-              >
+              <Link href="/contact" className="text-gray-900 hover:text-accent transition-colors font-medium">
                 Contact
               </Link>
             </div>
@@ -129,7 +123,7 @@ export default function Header() {
             {/* Search & CTA */}
             <div className="hidden lg:flex items-center space-x-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Rechercher un produit..."
@@ -167,7 +161,7 @@ export default function Header() {
               <div className="px-4 py-6 space-y-6">
                 {/* Mobile Search */}
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
                     type="text"
                     placeholder="Rechercher..."
@@ -184,11 +178,11 @@ export default function Header() {
                   >
                     Accueil
                   </Link>
-                  
+
                   <div className="space-y-2">
                     <p className="text-lg font-medium text-gray-900">Catégories</p>
                     <div className="pl-4 space-y-2">
-                      {categories.map((category) => (
+                      {navCategories.map((category) => (
                         <Link
                           key={category.slug}
                           href={`/categories/${category.slug}`}
@@ -201,19 +195,10 @@ export default function Header() {
                     </div>
                   </div>
 
-                  <Link 
-                    href="#" 
-                    className="block text-lg font-medium text-gray-900 hover:text-accent"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                  <Link href="/a-propos" className="block text-lg font-medium text-gray-900 hover:text-accent" onClick={() => setIsMenuOpen(false)}>
                     À Propos
                   </Link>
-                  
-                  <Link 
-                    href="/contact" 
-                    className="block text-lg font-medium text-gray-900 hover:text-accent"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                  <Link href="/contact" className="block text-lg font-medium text-gray-900 hover:text-accent" onClick={() => setIsMenuOpen(false)}>
                     Contact
                   </Link>
                 </nav>

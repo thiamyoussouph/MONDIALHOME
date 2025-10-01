@@ -100,7 +100,7 @@ const featuredProducts = [
     category: 'Salon',
     rating: 4.8,
     badge: 'Bestseller',
-    description: 'Design scandinave en tissu premium avec coussins moelleux',
+    description: "Design scandinave en tissu premium avec coussins moelleux",
     reviewCount: 124,
     stock: 8
   },
@@ -852,10 +852,10 @@ export default function HomePage() {
               {/* Stats Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                 {[
-                  { number: "2500+", label: "Clients Satisfaits", icon: "👥" },
-                  { number: "98%", label: "Taux de Satisfaction", icon: "⭐" },
-                  { number: "15+", label: "Années d&apos;Expérience", icon: "🏆" },
-                  { number: "500m²", label: "Showroom à Dakar", icon: "🏢" }
+                  { number: "2500+", label: "Clients Satisfaits", icon: null },
+                  { number: "98%", label: "Taux de Satisfaction", icon: null },
+                  { number: "15+", label: "Années d'Expérience", icon: null },
+                  { number: "500m²", label: "Showroom à Dakar", icon: null }
                 ].map((stat, index) => (
                   <motion.div
                     key={index}

@@ -186,7 +186,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-gray-300 text-sm">
-                © 2025 Meubles Sénégal. Tous droits réservés.
+                © 2025 Meubles Sénégal. Réalisé par Active Solution. Tous droits réservés
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-2 text-xs text-gray-400">
                 <Link href="/mentions-legales" className="hover:text-accent transition-colors">
