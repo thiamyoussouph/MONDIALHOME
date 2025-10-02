@@ -37,7 +37,7 @@ export default function Footer() {
                 <span className="text-white font-bold text-xl">M</span>
               </div>
               <div>
-                <h3 className="text-2xl font-bold">Mondiale Home</h3>
+                <h3 className="text-2xl font-bold">Mondiale Homesn</h3>
                 <p className="text-accent text-sm">Qualité & Design</p>
               </div>
             </div>

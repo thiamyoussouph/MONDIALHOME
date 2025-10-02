@@ -10,9 +10,9 @@ const contactInfo = [
     icon: MapPin,
     title: 'Notre Showroom',
     details: [
-      'Rue de la République',
-      'Plateau, Dakar',
-      'Sénégal'
+      "Parcelle en face de l'arrêt BRT Police Parcelles",
+      "l'arrêt BRT Police Parcelles",
+      "Dakar, Sénégal"
     ],
     action: 'Voir sur la carte'
   },
