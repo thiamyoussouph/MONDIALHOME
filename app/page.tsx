@@ -76,7 +76,7 @@ const categories = [
     id: 9,
     name: 'Portes Blindées',
     slug: 'portes-blindees',
-    image: '/images/port.jpeg',
+    image: '/images/blindesansvitre.jpeg',
     description: 'Sécurité et esthétique réunies',
     productCount: 12
   },
