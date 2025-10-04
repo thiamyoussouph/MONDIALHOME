@@ -66,7 +66,7 @@ export default function Header() {
                 />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-primary">Mondiale Home </h1> 
+                <h1 className="text-xl font-bold text-primary">Mondiale Home SN</h1> 
                 <p className="text-xs text-gray-600">Qualité & Design</p>
               </div>
             </div>
