@@ -83,7 +83,7 @@ export default function MaintenancePage() {
         {/* Boutons */}
         <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
           <Link
-            href="mailto:contact@exemple.com"
+            href="mailto:senmondialhome@gmail.com"
             className="inline-flex justify-center rounded-xl bg-amber-400/90 hover:bg-amber-400 text-black font-medium px-5 py-3 transition"
           >
             Nous contacter
@@ -98,11 +98,10 @@ export default function MaintenancePage() {
 
         {/* Liens sociaux (optionnels) */}
         <div className="mt-6 flex items-center justify-center gap-5 text-sm text-gray-400">
-          <Link href="https://www.linkedin.com/company/active-solution" className="hover:text-white transition">LinkedIn</Link>
+          <Link href="https://www.instagram.com/mondiale_home_sn/" className="hover:text-white transition">Instagram</Link>
           <span className="opacity-30">•</span>
-          <Link href="https://x.com/" className="hover:text-white transition">X/Twitter</Link>
-          <span className="opacity-30">•</span>
-          <Link href="https://www.facebook.com/" className="hover:text-white transition">Facebook</Link>
+        
+          <Link href="https://www.facebook.com/p/Mondiale-Home-SN-61550580473880/?locale=fr_FR" className="hover:text-white transition">Facebook</Link>
         </div>
 
         {/* Footer */}
