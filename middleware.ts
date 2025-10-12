@@ -9,7 +9,7 @@ export function middleware(req: NextRequest) {
   // Laisser passer assets & page maintenance
   if (PUBLIC.some(p => pathname.startsWith(p))) return NextResponse.next()
 
-  // ✅ Actif sur Vercel (prod ET preview). Inactif en local (npm run dev).
+  // Actif sur Vercel (prod ET preview). Inactif en local.
   const runningOnVercel = process.env.VERCEL === '1'
   const raw = (process.env.MAINTENANCE_MODE || '').trim().toLowerCase()
   const maintenanceOn = runningOnVercel && raw === 'on'
@@ -31,5 +31,5 @@ export function middleware(req: NextRequest) {
   return NextResponse.rewrite(to, { status: 503 })
 }
 
-// ❗️Version qui bloque aussi /api (tout bloquer)
+// Bloque tout (y compris /api). Si tu veux laisser /api, remplace par: { matcher: ['/((?!api).*)'] }
 export const config = { matcher: ['/(.*)'] }
