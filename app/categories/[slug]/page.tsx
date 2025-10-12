@@ -1,15 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useMemo, useState } from 'react'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { Filter, Grid, List, Star, ArrowLeft } from 'lucide-react'
 import { categories as siteCategories } from '@/lib/categories' // ✅ source unique des catégories
-
-interface PageProps {
-  params: Promise<{ slug: string }>
-}
 
 type CategoryData = {
   name: string
@@ -32,354 +29,43 @@ type Product = {
   inStock: boolean
 }
 
-// --- Tes produits d’origine (id 11 ajouté pour éviter le doublon de 9)
-// --- Produits (identiques), slugs mis à jour pour coller au Header
+/**
+ * ⚠️ Si tu utilises des images distantes (Unsplash, etc.),
+ * pense à whitelister le domaine dans next.config.js:
+ * images: { remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }] }
+ */
+
+// --- Produits (IDs uniques + slugs alignés sur le menu)
 const allProducts: Product[] = [
-  {
-    id: 1,
-    name: 'Canapé 3 Places Moderne',
-    description: "Un canapé moderne 3 places en tissu de haute qualité, parfait pour votre salon.",
-    price: 450000,
-    originalPrice: 520000,
-    image: '/images/salon3.jpeg',
-    category: 'Salon',
-    slug: 'salons-modernes', // ⬅️ ancien: salon-salle-manger
-    rating: 4.8,
-    reviews: 24,
-    badge: 'Promo',
-    inStock: true
-  },
-  {
-    id: 2,
-    name: 'Table Basse Design',
-    description: "Table basse élégante en bois et métal, idéale pour compléter votre salon.",
-    price: null,
-    originalPrice: null,
-    image: '/images/tables3.jpeg',
-    category: 'Salon',
-    slug: 'salons-modernes', // ⬅️ ancien: salon-salle-manger
-    rating: 4.6,
-    reviews: 18,
-    badge: 'Nouveau',
-    inStock: true
-  },
-  {
-    id: 3,
-    name: 'Fauteuil Confort',
-    description: "Fauteuil rembourré offrant un confort optimal et un design moderne.",
-    price: null,
-    originalPrice: null,
-    image: '/images/feuteil2.jpeg',
-    category: 'Salon',
-    slug: 'salons-modernes', // ⬅️ ancien: salon-salle-manger (tu peux le mettre en 'salons-royaux' si tu préfères)
-    rating: 4.9,
-    reviews: 31,
-    badge: null,
-    inStock: true
-  },
-  {
-    id: 4,
-    name: 'Fauteuils Modernes',
-    description: "Lot de fauteuils modernes avec accoudoirs, parfaits pour vos moments de détente.",
-    price: null,
-    originalPrice: null,
-    image: '/images/feuteil1.jpeg',
-    category: 'Salon',
-    slug: 'salons-modernes', // ⬅️ ancien: salon-salle-manger
-    rating: 4.5,
-    reviews: 12,
-    badge: null,
-    inStock: true
-  },
-  {
-    id: 5,
-    name: 'Chambre à coucher NEPTUNE',
-    description: " Composée de 9 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir",
-    price: null,
-    originalPrice: null,
-    image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop',
-    category: 'Chambre',
-    slug: 'chambre-coucher',
-    rating: 4.7,
-    reviews: 42,
-    badge: 'Promo',
-    inStock: true
-  },
-  {
-    id: 6,
-    name: 'Armoire 3 Portes',
-    description: "Grande armoire en bois avec trois portes et espaces de rangement optimisés.",
-    price: null,
-    originalPrice: null,
-    image: '/images/chambreacoucher.jpeg',
-    category: 'Chambre',
-    slug: 'chambre-coucher',
-    rating: 4.6,
-    reviews: 28,
-    badge: 'Nouveau',
-    inStock: true
-  },
-  {
-    id: 7,
-    name: 'Bureau Moderne',
-    description: "Bureau minimaliste et fonctionnel, idéal pour vos journées de travail.",
-    price: null,
-    originalPrice: null,
-    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop',
-    category: 'Bureau',
-    slug: 'bureau',
-    rating: 4.8,
-    reviews: 22,
-    badge: null,
-    inStock: true
-  },
-  {
-    id: 8,
-    name: 'Table à Manger',
-    description: "Table à manger spacieuse en bois massif pouvant accueillir jusqu’à 6 personnes.",
-    price: null,
-    originalPrice: null,
-    image: 'https://images.unsplash.com/photo-1549497538-303791108f95?w=600&h=400&fit=crop',
-    category: 'Salle à Manger',
-    slug: 'salle-manger', // ⬅️ ancien: tables-chaises
-    rating: 4.9,
-    reviews: 35,
-    badge: null,
-    inStock: true
-  },
-  {
-    id: 9,
-    name: 'Chambre à coucher RIHTIM',
-    description :"Composée de 9 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir.Dimensions : largeur 180 - Longueur 200",
-    price: null,
-    originalPrice: null,
-    image: '/images/chambreacoucher1.jpeg',
-    category: 'Chambre',
-    slug: 'chambre-coucher',
-    rating: 4.6,
-    reviews: 28,
-    badge: 'Nouveau',
-    inStock: true
-  },  {
-    id: 17,
-    name: 'Chambre à coucher MILANO',
-    description :"Composée de 8 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir",
-    price: null,
-    originalPrice: null,
-    image: '/images/CHAMBRETESTE.jpeg',
-    category: 'Chambre',
-    slug: 'chambre-coucher',
-    rating: 4.6,
-    reviews: 28,
-    badge: 'Nouveau',
-    inStock: true
-  },
-  {
-    id: 11, // ⬅️ ancien doublon "9" corrigé pour éviter les clés React dupliquées
-    name: 'Chambre à coucher ETHNA',
-    description :"Composée de 9 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir",
-    price: null,
-    originalPrice: null,
-    image: '/images/site_photo_03.jpg',
-    category: 'Chambre',
-    slug: 'chambre-coucher',
-    rating: 4.6,
-    reviews: 28,
-    badge: 'Nouveau',
-    inStock: true
-  },
-  {
-    id: 10,
-    name: 'porteblinde',
-    description: "Canapé d'angle en L avec tissu doux et coussins confortables.",
-    price: null,
-    originalPrice: null,
-    image: '/images/porteblinde.jpeg',
-    category: 'Salon',
-    slug: 'salons-modernes', // ⬅️ ancien: canape-angle
-    rating: 4.7,
-    reviews: 15,
-    badge: null,
-    inStock: true
-  },
-  {
-    id: 12,
-    name: 'Meuble TV 180cm',
-    description: "Meuble télé moderne finition chêne + laqué.",
-    price: null,
-    originalPrice: null,
-    image: '/images/meubletele.jpg',
-    category: 'Salon',
-    slug: 'meuble-tele',
-    rating: 4.5,
-    reviews: 12,
-    badge: null,
-    inStock: true
-  },
-  {
-    id: 13,
-    name: 'Matelas Orthopédique  ',
-    description: "modèle DIDIM Épaisseur : 28cm Dimensions : 180/200.",
-    price: null,
-    originalPrice: null,
-    image: '/images/matelas.jpeg',
-    category: 'Chambre',
-    slug: 'matelas',
-    rating: 4.8,
-    reviews: 22,
-    badge: 'Nouveau',
-    inStock: true
-  },  {
-    id: 42,
-    name: 'Matelas Orthopédique  ',
-    description: "modèle SELTA Coffre fort intégré Dimensions : 160/200 Dimensions : 180/200.Dimensions : 140/190",
-    price: null,
-    originalPrice: null,
-    image: '/images/HOST23.jpeg',
-    category: 'Chambre',
-    slug: 'matelas',
-    rating: 4.8,
-    reviews: 22,
-    badge: 'Nouveau',
-    inStock: true
-  },
-  {
-    id: 40,
-    name: 'Porte Intérieure Chêne',
-    description: "Charnières invisibles, design minimal.",
-    price: null,
-    originalPrice: null,
-    image: '/images/porteblindé.jpeg',
-    category: 'Portes',
-    slug: 'portes-interieures',
-    rating: 4.6,
-    reviews: 28,
-    badge: null,
-    inStock: true
-  },
-  {
-    id: 15,
-    name: 'Porte Blindée un battant',
-    description: " Dimensions : Hauteur : 210cm Largeur : 90 - 100cm Modèle : GRISE",
-    price: null,
-    originalPrice: null,
-    image: '/images/posteblindé1.jpeg',
-    category: 'Portes',
-    slug: 'portes-blindees',
-    rating: 4.7,
-    reviews: 18,
-    badge: 'Premium',
-    inStock: true
-  },
-  {
-    id: 30,
-    name: 'Porte Blindée un battant',
-    description: " Porte Blindée un battant Dimensions : Hauteur : 210cm Largeur : 90 - 100cm Modèle : OCRE",
-    price: null,
-    originalPrice: null,
-    image: '/images/porteblinde2.jpeg',
-    category: 'Portes',
-    slug: 'portes-blindees',
-    rating: 4.7,
-    reviews: 18,
-    badge: 'Premium',
-    inStock: true
-  },  {
-    id: 31,
-    name: 'Porte Blindée un battant',
-    description: " Porte Blindée un battant Dimensions : Hauteur : 210cm Largeur : 90 - 100cm Modèle : 801",
-    price: null,
-    originalPrice: null,
-    image: '/images/blinde3.jpeg',
-    category: 'Portes',
-    slug: 'portes-blindees',
-    rating: 4.7,
-    reviews: 18,
-    badge: 'Premium',
-    inStock: true
-  },  {
-    id: 33,
-    name: 'Porte Blindée un battant',
-    description: " Porte Blindée un battant Dimensions : Hauteur : 210cm Largeur : 90 - 100cm Modèle : Marron - Noir",
-    price: null,
-    originalPrice: null,
-    image: '/images/blinde4.jpeg',
-    category: 'Portes',
-    slug: 'portes-blindees',
-    rating: 4.7,
-    reviews: 18,
-    badge: 'Premium',
-    inStock: true
-  }, {
-    id: 34,
-    name: 'Porte Blindée double battants',
-    description: " Porte Blindée double battants Dimensions : Hauteur : 210-215cm Largeur : 130cm Modèle : 801 sans Vitre",
-    price: null,
-    originalPrice: null,
-    image: '/images/blindesansvitre.jpeg',
-    category: 'Portes',
-    slug: 'portes-blindees',
-    rating: 4.7,
-    reviews: 18,
-    badge: 'Premium',
-    inStock: true
-  },{
-    id: 34,
-    name: 'Porte Blindée double battants',
-    description: " Porte Blindée double battants Dimensions : Hauteur : 210-215cm Largeur : 130cm Modèle : OCRE",
-    price: null,
-    originalPrice: null,
-    image: '/images/doublebatant.jpeg',
-    category: 'Portes',
-    slug: 'portes-blindees',
-    rating: 4.7,
-    reviews: 18,
-    badge: 'Premium',
-    inStock: true
-  },{
-    id: 34,
-    name: 'Porte Blindée double battants',
-    description: " Porte Blindée double battants Dimensions : Hauteur : 210-215cm Largeur : 130cm Modèle : 801 sans Vitre",
-    price: null,
-    originalPrice: null,
-    image: '/images/doublebatant.jpeg',
-    category: 'Portes',
-    slug: 'portes-blindees',
-    rating: 4.7,
-    reviews: 18,
-    badge: 'Premium',
-    inStock: true
-  },{
-    id: 34,
-    name: 'Porte Blindée double battants',
-    description: " Porte Blindée double battants Dimensions : Hauteur : 210-215cm Largeur : 130cm Modèle : Marron - Noir",
-    price: null,
-    originalPrice: null,
-    image: '/images/porteblinddouble.jpeg',
-    category: 'Portes',
-    slug: 'portes-blindees',
-    rating: 4.7,
-    reviews: 18,
-    badge: 'Premium',
-    inStock: true
-  },
-  {
-    id: 16,
-    name: 'Tapis Berbère 200x300',
-    description: "Laine naturelle, tissé main.",
-    price: null,
-    originalPrice: null,
-    image: '/images/tapis.jpg',
-    category: 'Décoration',
-    slug: 'tapis',
-    rating: 4.7,
-    reviews: 15,
-    badge: null,
-    inStock: true
-  }
+  { id: 1, name: 'SALON RIHTIM', description: "composé d’un Salon 8 places (3+3+1+1) + Table Basse + Meuble TV + Buffet et d’une salle à manger complète composée d’une table 6 places + 6 chaises + Buffet + Miroir.", price: null, originalPrice: null, image: '/images/SALLRIHTIM.png', category: 'Salon', slug: 'salons-modernes', rating: 4.8, reviews: 24, badge: 'Promo', inStock: true },
+  { id: 2, name: 'SALON NOBEL', description: "composé d’un Salon 8 places (3+3+1+1) + Table Basse + Meuble TV + Buffet et d’une salle à manger complète composée d’une table 6 places + 6 chaises + Buffet + Miroir.", price: null, originalPrice: null, image: '/images/Sallenobele.png', category: 'Salon', slug: 'salons-modernes', rating: 4.6, reviews: 18, badge: 'Nouveau', inStock: true },
+  { id: 3, name: 'SALON - LION', description: "en tissu haut de gamme originaire de Turquie. 8 Places (3+3+1+1)", price: null, originalPrice: null, image: '/images/salonlion.jpeg', category: 'Salon', slug: 'salons-modernes', rating: 4.9, reviews: 31, badge: null, inStock: true },
+  { id: 4, name: 'SALON - LOFT', description: "en tissu haut de gamme originaire de Turquie. 8 Places (3+3+1+1)", price: null, originalPrice: null, image: '/images/salonloft.png', category: 'Salon', slug: 'salons-modernes', rating: 4.5, reviews: 12, badge: null, inStock: true },
+  { id: 5, name: 'Chambre à coucher NEPTUNE', description: "Composée de 9 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir", price: null, originalPrice: null, image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop', category: 'Chambre', slug: 'chambre-coucher', rating: 4.7, reviews: 42, badge: 'Promo', inStock: true },
+  { id: 6, name: 'LIFESTYLE', description: " Chambre à coucher sans armoire destinée souvent à ceux qui ont déjà des dressings ou des placards.Ces chambres sont munies d’un coffre de rangement et sont composées de Lit + 2 Chevets + Coiffeuse + Miroir + Banquette.", price: null, originalPrice: null, image: '/images/chambreacoucher.jpeg', category: 'Chambre', slug: 'chambre-coucher', rating: 4.6, reviews: 28, badge: 'Nouveau', inStock: true },
+  { id: 7, name: 'BLOCK', description: " Chambre à coucher sans armoire destinée souvent à ceux qui ont déjà des dressings ou des placards.Ces chambres sont munies d’un coffre de rangement et sont composées de Lit + 2 Chevets + Coiffeuse + Miroir + Banquette.", price: null, originalPrice: null, image: '/images/litblock.png', category: 'Chambre', slug: 'chambre-coucher', rating: 4.6, reviews: 28, badge: 'Nouveau', inStock: true },
+  { id: 8, name: 'Bureau Moderne', description: "Bureau minimaliste et fonctionnel, idéal pour vos journées de travail.", price: null, originalPrice: null, image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop', category: 'Bureau', slug: 'bureau', rating: 4.8, reviews: 22, badge: null, inStock: true },
+  { id: 9, name: 'Salle à manger NOBEL', description: "Salle à manger complète : table 6 places + 6 chaises + Buffet + Miroir.", price: null, originalPrice: null, image: '/images/salleamangenobel.png', category: 'Salle à Manger', slug: 'salle-manger', rating: 4.9, reviews: 35, badge: null, inStock: true },
+  { id: 10, name: 'Salle à manger RIHTIM', description: "Salle à manger complète : table 6 places + 6 chaises + Buffet + Miroir.", price: null, originalPrice: null, image: '/images/alleamangerithmi.png', category: 'Salle à Manger', slug: 'salle-manger', rating: 4.9, reviews: 35, badge: null, inStock: true },
+  { id: 11, name: 'Chambre à coucher RIHTIM', description: "ffComposée de 9 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir. Dimensions : 180 x 200", price: null, originalPrice: null, image: '/images/rithmichambres.png', category: 'Chambre', slug: 'chambre-coucher', rating: 4.6, reviews: 28, badge: 'Nouveau', inStock: true },
+  { id: 12, name: 'Chambre à coucher MILANO', description: "Composée de 8 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir", price: null, originalPrice: null, image: '/images/milanochambre.png', category: 'Chambre', slug: 'chambre-coucher', rating: 4.6, reviews: 28, badge: 'Nouveau', inStock: true },
+  { id: 13, name: 'Chambre à coucher ETHNA', description: "Composée de 9 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir", price: null, originalPrice: null, image: '/images/site_photo_03.jpg', category: 'Chambre', slug: 'chambre-coucher', rating: 4.6, reviews: 28, badge: 'Nouveau', inStock: true },
+  { id: 14, name: 'Chambre à coucher NOBEL', description: "Composée de 9 pièces : Lit + Armoire + 2 Chevets + POUF + Banquette + Meuble de rangement + Miroir debout sur Tiroir", price: null, originalPrice: null, image: '/images/NOBEL.png', category: 'Chambre', slug: 'chambre-coucher', rating: 4.6, reviews: 28, badge: 'Nouveau', inStock: true },
+  { id: 15, name: 'SALON PARIS', description: "en tissu haut de gamme originaire de Turquie. 8 Places (3+3+1+1)", price: null, originalPrice: null, image: '/images/salonesli.png', category: 'Salon', slug: 'salons-modernes', rating: 4.7, reviews: 15, badge: null, inStock: true },
+  { id: 16, name: 'SALON ESLI', description: "en tissu haut de gamme originaire de Turquie. 8 Places (3+3+1+1)", price: null, originalPrice: null, image: '/images/salonparis.png', category: 'Salon', slug: 'salons-modernes', rating: 4.7, reviews: 15, badge: null, inStock: true },
+  { id: 17, name: 'Meuble TV 180cm', description: "Meuble télé moderne finition chêne + laqué.", price: null, originalPrice: null, image: '/images/meubletele.jpg', category: 'Salon', slug: 'meuble-tele', rating: 4.5, reviews: 12, badge: null, inStock: true },
+  { id: 18, name: 'Matelas Orthopédique DIDIM', description: "Épaisseur : 28cm — Dimensions : 180/200.", price: null, originalPrice: null, image: '/images/matelas.jpeg', category: 'Chambre', slug: 'matelas', rating: 4.8, reviews: 22, badge: 'Nouveau', inStock: true },
+  { id: 19, name: 'Matelas Orthopédique SELTA', description: "Coffre fort intégré — Dimensions : 140/190, 160/200, 180/200.", price: null, originalPrice: null, image: '/images/HOST23.jpeg', category: 'Chambre', slug: 'matelas', rating: 4.8, reviews: 22, badge: 'Nouveau', inStock: true },
+  { id: 20, name: 'Porte Intérieure Chêne', description: "Charnières invisibles, design minimal.", price: null, originalPrice: null, image: '/images/porteblindé.jpeg', category: 'Portes', slug: 'portes-interieures', rating: 4.6, reviews: 28, badge: null, inStock: true },
+  { id: 21, name: 'Porte Blindée un battant — GRISE', description: "Hauteur : 210cm — Largeur : 90–100cm.", price: null, originalPrice: null, image: '/images/posteblindé1.jpeg', category: 'Portes', slug: 'portes-blindees', rating: 4.7, reviews: 18, badge: 'Premium', inStock: true },
+  { id: 22, name: 'Porte Blindée un battant — OCRE', description: "Hauteur : 210cm — Largeur : 90–100cm.", price: null, originalPrice: null, image: '/images/porteblinde2.jpeg', category: 'Portes', slug: 'portes-blindees', rating: 4.7, reviews: 18, badge: 'Premium', inStock: true },
+  { id: 23, name: 'Porte Blindée un battant — 801', description: "Hauteur : 210cm — Largeur : 90–100cm.", price: null, originalPrice: null, image: '/images/blinde3.jpeg', category: 'Portes', slug: 'portes-blindees', rating: 4.7, reviews: 18, badge: 'Premium', inStock: true },
+  { id: 24, name: 'Porte Blindée un battant — Marron/Noir', description: "Hauteur : 210cm — Largeur : 90–100cm.", price: null, originalPrice: null, image: '/images/blinde4.jpeg', category: 'Portes', slug: 'portes-blindees', rating: 4.7, reviews: 18, badge: 'Premium', inStock: true },
+  { id: 25, name: 'Porte Blindée double battants — 801 (sans vitre)', description: "Hauteur : 210–215cm — Largeur : 130cm.", price: null, originalPrice: null, image: '/images/blindesansvitre.jpeg', category: 'Portes', slug: 'portes-blindees', rating: 4.7, reviews: 18, badge: 'Premium', inStock: true },
+  { id: 26, name: 'Porte Blindée double battants — OCRE', description: "Hauteur : 210–215cm — Largeur : 130cm.", price: null, originalPrice: null, image: '/images/doublebatant.jpeg', category: 'Portes', slug: 'portes-blindees', rating: 4.7, reviews: 18, badge: 'Premium', inStock: true },
+  { id: 27, name: 'Porte Blindée double battants — Marron/Noir', description: "Hauteur : 210–215cm — Largeur : 130cm.", price: null, originalPrice: null, image: '/images/porteblinddouble.jpeg', category: 'Portes', slug: 'portes-blindees', rating: 4.7, reviews: 18, badge: 'Premium', inStock: true },
+  { id: 28, name: 'Tapis Berbère 200x300', description: "Laine naturelle, tissé main.", price: null, originalPrice: null, image: '/images/tapis.jpg', category: 'Décoration', slug: 'tapis', rating: 4.7, reviews: 15, badge: null, inStock: true }
 ]
-
-
 
 // Filtres prix
 const filters = {
@@ -393,9 +79,19 @@ const filters = {
 
 const nf = new Intl.NumberFormat('fr-FR')
 
-export default function CategoryPage({ params }: PageProps) {
-  const [slug, setSlug] = useState<string>('')
-  const [category, setCategory] = useState<CategoryData | null>(null)
+export default function CategoryPage() {
+  const params = useParams()
+  const slugParam = Array.isArray(params?.slug) ? params.slug[0] : (params?.slug as string | undefined)
+  const slug = slugParam ?? ''
+
+  // --- Catégorie issue de la source partagée
+  const category: CategoryData | null = useMemo(() => {
+    if (!slug) return null
+    const found = siteCategories.find(c => c.slug === slug)
+    return found
+      ? { name: found.name, description: found.description, hero: found.image }
+      : { name: 'Catégorie introuvable', description: 'La catégorie demandée n’existe pas.', hero: '/images/placeholder-hero.jpg' }
+  }, [slug])
 
   // UI
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
@@ -403,47 +99,22 @@ export default function CategoryPage({ params }: PageProps) {
   const [showFilters, setShowFilters] = useState(false)
 
   // Filtres
-  const [selectedPriceRange, setSelectedPriceRange] = useState<string>('')         // label
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])       // multiple
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string>('') // label
+  const [includeSurDevis, setIncludeSurDevis] = useState<boolean>(true)    // ✅ inclure les prix null
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [minRating, setMinRating] = useState<number | null>(null)
   const [inStockOnly, setInStockOnly] = useState(false)
   const [promoOnly, setPromoOnly] = useState(false)
 
-  // ⚡ Récupère le slug puis mappe sur la source partagée
-  useEffect(() => {
-    params.then((resolved) => {
-      const s = resolved.slug
-      setSlug(s)
-
-      const found = siteCategories.find(c => c.slug === s)
-      if (found) {
-        setCategory({
-          name: found.name,
-          description: found.description,
-          hero: found.image // on utilise l'image de la catégorie comme hero
-        })
-      } else {
-        // Catégorie inconnue => on met une valeur par défaut
-        setCategory({
-          name: 'Catégorie introuvable',
-          description: 'La catégorie demandée n’existe pas.',
-          hero: '/images/placeholder-hero.jpg'
-        })
-      }
-    })
-  }, [params])
-
-  // ✅ Toujours calculé AVANT un return conditionnel
   const isLoading = !slug || !category
   if (isLoading) {
     return (
       <div className="pt-24 min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent" />
       </div>
     )
   }
 
-  // ✅ Plus de Hook ici : simple valeur dérivée -> aucun risque d’ordre des Hooks
   const isUnknown = category.name === 'Catégorie introuvable'
 
   // Produits de la catégorie courante (basés sur le slug)
@@ -452,17 +123,21 @@ export default function CategoryPage({ params }: PageProps) {
   // Catégories disponibles (dynamiques selon les produits trouvés)
   const availableCategories = Array.from(new Set(categoryProducts.map(p => p.category)))
 
-  // Pipeline de filtrage
+  // --- Pipeline de filtrage
   let filteredProducts = [...categoryProducts]
 
   // Prix
   if (selectedPriceRange) {
     const range = filters.priceRanges.find(r => r.label === selectedPriceRange)
     if (range) {
-      filteredProducts = filteredProducts.filter(p =>
-        p.price !== null && p.price >= range.min && p.price <= range.max
-      )
+      filteredProducts = filteredProducts.filter(p => {
+        if (p.price === null) return includeSurDevis // ✅ garde les "sur devis" si coché
+        return p.price >= range.min && p.price <= range.max
+      })
     }
+  } else if (!includeSurDevis) {
+    // Sans tranche sélectionnée mais "sur devis" décoché => exclure les null
+    filteredProducts = filteredProducts.filter(p => p.price !== null)
   }
 
   // Catégorie(s)
@@ -503,13 +178,12 @@ export default function CategoryPage({ params }: PageProps) {
 
   // Helpers
   const toggleCategory = (cat: string) => {
-    setSelectedCategories(prev =>
-      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
-    )
+    setSelectedCategories(prev => (prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]))
   }
 
   const resetFilters = () => {
     setSelectedPriceRange('')
+    setIncludeSurDevis(true)
     setSelectedCategories([])
     setMinRating(null)
     setInStockOnly(false)
@@ -543,21 +217,16 @@ export default function CategoryPage({ params }: PageProps) {
       <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Si la catégorie n'existe pas */}
+          {/* Catégorie inconnue */}
           {isUnknown && (
             <div className="bg-white rounded-2xl p-8 shadow-md border border-gray-100 text-center mb-10">
-              <p className="text-gray-700 mb-4">
-                La catégorie demandée n’existe pas ou a été renommée.
-              </p>
-              <Link href="/#categories" className="text-accent font-semibold underline">
-                Voir toutes les catégories
-              </Link>
+              <p className="text-gray-700 mb-4">La catégorie demandée n’existe pas ou a été renommée.</p>
+              <Link href="/#categories" className="text-accent font-semibold underline">Voir toutes les catégories</Link>
             </div>
           )}
 
           <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-
-            {/* Filtres (cachés si aucun produit) */}
+            {/* Filtres */}
             <div className={`lg:col-span-1 ${filteredProducts.length ? (showFilters ? 'block' : 'hidden lg:block') : 'hidden'} mb-8 lg:mb-0`}>
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -589,10 +258,28 @@ export default function CategoryPage({ params }: PageProps) {
                         </span>
                       </label>
                     ))}
+                    <button
+                      onClick={() => setSelectedPriceRange('')}
+                      className="mt-2 text-xs underline text-gray-500 hover:text-gray-700"
+                    >
+                      Effacer la gamme de prix
+                    </button>
+
+                    <label className="mt-3 flex items-center group cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={includeSurDevis}
+                        onChange={() => setIncludeSurDevis(v => !v)}
+                        className="text-indigo-600 focus:ring-indigo-500 focus:ring-2 rounded"
+                      />
+                      <span className="ml-3 text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                        Inclure “Sur devis”
+                      </span>
+                    </label>
                   </div>
                 </div>
 
-                {/* Catégories (internes à la page, pas le menu global) */}
+                {/* Catégories (internes à la page) */}
                 {availableCategories.length > 0 && (
                   <div className="mb-8">
                     <h4 className="font-semibold mb-4 text-gray-700 text-sm uppercase tracking-wide">Catégories</h4>
@@ -627,12 +314,10 @@ export default function CategoryPage({ params }: PageProps) {
                           onChange={() => setMinRating(rating)}
                           className="text-indigo-600 focus:ring-indigo-500 focus:ring-2"
                         />
-                        <div className="ml-3 flex items-center">
-                          <Star className="w-4 h-4 text-amber-400 fill-current" />
-                          <span className="ml-1 text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
-                            {rating} &nbsp;et plus
-                          </span>
-                        </div>
+                        <span className="ml-3 flex items-center text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                          <Star className="w-4 h-4 mr-1 text-amber-400 fill-current" />
+                          {rating} et plus
+                        </span>
                       </label>
                     ))}
                     <button
@@ -713,28 +398,32 @@ export default function CategoryPage({ params }: PageProps) {
                   <div className="flex border rounded-lg overflow-hidden">
                     <button
                       onClick={() => setViewMode('grid')}
+                      aria-pressed={viewMode === 'grid'}
                       className={`p-2 ${viewMode === 'grid' ? 'bg-accent text-white' : 'hover:bg-gray-50'}`}
                     >
                       <Grid className="w-4 h-4" />
+                      <span className="sr-only">Vue grille</span>
                     </button>
                     <button
                       onClick={() => setViewMode('list')}
+                      aria-pressed={viewMode === 'list'}
                       className={`p-2 ${viewMode === 'list' ? 'bg-accent text-white' : 'hover:bg-gray-50'}`}
                     >
                       <List className="w-4 h-4" />
+                      <span className="sr-only">Vue liste</span>
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Grille/List produits */}
+              {/* Grille/Liste */}
               <div className={`grid gap-8 ${viewMode === 'grid' ? 'md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
-                {filteredProducts.map((product, index) => (
+                {filteredProducts.map((product) => (
                   <motion.article
-                    key={`${product.id}-${index}`}
+                    key={product.id} // ✅ clé stable
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: index * 0.1 }}
+                    transition={{ duration: 0.6 }}
                     viewport={{ once: true }}
                     className="group"
                   >
@@ -742,7 +431,7 @@ export default function CategoryPage({ params }: PageProps) {
                       {/* Image */}
                       <div className="relative h-64 overflow-hidden">
                         <Image
-                          src={product.image || "/images/placeholder-product.jpg"}
+                          src={product.image || '/images/placeholder-product.jpg'}
                           alt={product.name}
                           fill
                           className="object-cover group-hover:scale-110 transition-transform duration-1000"
@@ -760,30 +449,35 @@ export default function CategoryPage({ params }: PageProps) {
                       <div className="p-8">
                         <div className="space-y-4">
                           <div>
-                            <span className="text-xs text-accent font-bold uppercase tracking-wider">
-                              {product.category}
-                            </span>
+                            <span className="text-xs text-accent font-bold uppercase tracking-wider">{product.category}</span>
                             <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-accent transition-colors leading-tight">
                               {product.name}
                             </h3>
                             <p className="text-gray-600 mt-3 leading-relaxed text-sm line-clamp-3">
-                              {product.description ?? "Meuble de qualité supérieure pour votre intérieur"}
+                              {product.description ?? 'Meuble de qualité supérieure pour votre intérieur'}
                             </p>
                           </div>
 
                           <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                             <div className="space-y-1">
-                              {product.price !== null && (
+                              {/* Prix actuel */}
+                              {product.price !== null ? (
                                 <div className="text-2xl font-bold text-gray-900">
                                   {nf.format(product.price)}
                                   <span className="text-sm text-gray-500 ml-1 font-medium">CFA</span>
                                 </div>
+                              ) : (
+                                <div className="text-sm font-semibold text-gray-700">Sur devis</div>
                               )}
+
+                              {/* Ancien prix */}
                               {product.originalPrice !== null && (
                                 <div className="text-sm text-gray-400 line-through">
                                   {nf.format(product.originalPrice)} CFA
                                 </div>
                               )}
+
+                              {/* Rating */}
                               <div className="flex items-center space-x-1">
                                 <Star className="w-4 h-4 text-amber-400 fill-current" />
                                 <span className="text-sm font-bold text-gray-600">{product.rating}</span>
@@ -791,9 +485,13 @@ export default function CategoryPage({ params }: PageProps) {
                               </div>
                             </div>
 
-                            <button className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:border-accent hover:text-accent hover:bg-accent/5 transition-all duration-300 font-bold text-sm">
+                            <Link
+                              href={`/produits/${product.id}`}
+                              className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:border-accent hover:text-accent hover:bg-accent/5 transition-all duration-300 font-bold text-sm"
+                              aria-label={`Voir plus sur ${product.name}`}
+                            >
                               Voir Plus
-                            </button>
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -807,10 +505,7 @@ export default function CategoryPage({ params }: PageProps) {
                 <div className="text-center py-12">
                   <h3 className="text-xl font-semibold mb-2">Aucun produit trouvé</h3>
                   <p className="text-gray-600 mb-4">Modifiez vos critères de recherche</p>
-                  <button
-                    onClick={resetFilters}
-                    className="bg-accent text-white px-4 py-2 rounded-lg"
-                  >
+                  <button onClick={resetFilters} className="bg-accent text-white px-4 py-2 rounded-lg">
                     Réinitialiser les filtres
                   </button>
                 </div>
