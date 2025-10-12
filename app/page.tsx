@@ -622,7 +622,7 @@ export default function HomePage() {
           </div>
 
           {/* Section Ambiances - Redesignée */}
-          <motion.section
+          {/* <motion.section
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
@@ -683,7 +683,7 @@ export default function HomePage() {
                 </motion.div>
               ))}
             </div>
-          </motion.section>
+          </motion.section> */}
 
           {/* CTA Final - Redesigné */}
           <motion.section
