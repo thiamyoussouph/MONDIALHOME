@@ -1,10 +1,34 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion , Variants} from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Star, Truck, Shield, Headphones, Award } from 'lucide-react'
 import HeroCarousel from './components/HeroCarousel'
+
+
+const vWrap: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1, y: 0,
+    transition: { duration: 0.45, ease: [0.33, 1, 0.68, 1], staggerChildren: 0.06 },
+  },
+};
+
+const vItem: Variants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.33, 1, 0.68, 1] } },
+};
+
+const vCard: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.33, 1, 0.68, 1] } },
+};
+
+
+
+
+
 
 const categories = [
   {
@@ -189,249 +213,165 @@ export default function HomePage() {
       <HeroCarousel />
 
       {/* Categories Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-gray-50/30">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-    {/* Header */}
+ <section className="relative py-24 bg-white">
+  {/* Arrière-plan très subtil */}
+  <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-white"></div>
+  
+  <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-      className="text-center mb-20"
+      variants={vWrap}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.35 }}
+      className="space-y-12"
     >
-      <span className="inline-block bg-accent/10 text-accent px-6 py-2 rounded-full text-sm font-semibold mb-6 uppercase tracking-wide">
-        Notre Collection
-      </span>
-      <h2 className="text-5xl font-bold text-primary mb-6 leading-tight">
-        Explorez Nos
-        <span className="block text-accent">Univers</span>
-      </h2>
-      <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-        Chaque catégorie reflète notre passion pour le design et notre engagement
-        envers la qualité exceptionnelle
-      </p>
-    </motion.div>
-
-    {/* SOLUTION 1: Grille Uniforme 3 Colonnes */}
-    <div className="grid lg:grid-cols-3 gap-8 mb-16">
-      {categories.map((category, index) => (
-        <motion.div
-          key={category.id}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: index * 0.1 }}
-          viewport={{ once: true }}
-        >
-          <Link href={`/categories/${category.slug}`}>
-            <div className="group relative h-80 bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 border border-gray-100 hover:border-accent/30">
-
-              {/* Background Image */}
-              <div className="absolute inset-0">
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              </div>
-
-              {/* Badge pour la première catégorie */}
-              {index === 0 && (
-                <div className="absolute top-4 left-4">
-                  <span className="bg-accent text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-                    Collection Phare
-                  </span>
-                </div>
-              )}
-
-              {/* Compteur */}
-              <div className="absolute top-4 right-4">
-                <div className="bg-white/95 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-                  {category.productCount} produits
-                </div>
-              </div>
-
-              {/* Contenu */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <h3 className="text-xl font-bold mb-2">{category.name}</h3>
-                <p className="text-sm text-white/90 mb-4 line-clamp-2">
-                  {category.description}
-                </p>
-                <div className="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform duration-300">
-                  <span className="mr-2 text-sm">Découvrir</span>
-                  <ArrowRight className="w-4 h-4" />
-                </div>
-              </div>
-            </div>
-          </Link>
-        </motion.div>
-      ))}
-    </div>
-
-    {/* ALTERNATIVE: Mise en page 2+2 si vous avez exactement 4 catégories */}
-    {categories.length === 4 && (
-      <div className="hidden">
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
-          {/* Première rangée - 2 catégories principales */}
-          {categories.slice(0, 2).map((category, index) => (
-            <motion.div
-              key={category.id}
-              initial={{ opacity: 0, x: index === 0 ? -30 : 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <Link href={`/categories/${category.slug}`}>
-                <div className="group relative h-64 bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700">
-                  <div className="absolute inset-0">
-                    <Image
-                      src={index === 0 ? "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=400&fit=crop" :
-                            "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=400&fit=crop"}
-                      alt={category.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                  </div>
-                  
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-2xl font-bold mb-2">{category.name}</h3>
-                    <p className="text-white/90 mb-4">{category.description}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm bg-white/20 px-3 py-1 rounded-full">
-                        {category.productCount} produits
-                      </span>
-                      <div className="flex items-center group-hover:translate-x-2 transition-transform duration-300">
-                        <span className="mr-2">Voir</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+      {/* Marque minimaliste */}
+      <motion.div variants={vItem} className="flex justify-center">
+        <div className="flex items-center space-x-4">
+          <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+          <span className="text-[12px] tracking-wider text-gray-600/80 font-medium">
+            Mondiale Home SN
+          </span>
+          <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
         </div>
+      </motion.div>
 
-        {/* Deuxième rangée - 2 catégories secondaires */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-16">
-          {categories.slice(2).map((category, index) => (
-            <motion.div
-              key={category.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              viewport={{ once: true }}
-            >
-              <Link href={`/categories/${category.slug}`}>
-                <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 p-6 border border-gray-100 hover:border-accent/20">
-                  <div className="flex items-center">
-                    <div className="w-16 h-16 rounded-xl overflow-hidden mr-4 flex-shrink-0">
-                      <Image
-                        src={category.image}
-                        alt={category.name}
-                        width={64}
-                        height={64}
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-primary group-hover:text-accent transition-colors mb-1">
-                        {category.name}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-2">{category.description}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500">{category.productCount} produits</span>
-                        <ArrowRight className="w-4 h-4 text-accent group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    )}
+      {/* Titre + intro */}
+      <motion.h2
+        variants={vItem}
+        className="text-center text-[28px] sm:text-[34px] leading-[1.15] font-semibold text-gray-900"
+      >
+        La Qualité Mondiale, <span className="text-gray-800">Notre Promesse Quotidienne</span>
+      </motion.h2>
 
-    {/* Section Services */}
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.4 }}
-      viewport={{ once: true }}
-      className="bg-white rounded-3xl shadow-xl p-8 lg:p-12"
-    >
-      <div className="text-center mb-12">
-        <h3 className="text-3xl font-bold text-primary mb-4">
-          Services Inclus
-        </h3>
-        <p className="text-lg text-gray-600">
-          Une expérience complète pour votre satisfaction
+      <motion.div variants={vItem} className="max-w-3xl mx-auto text-center space-y-4">
+        <p className="text-[15.5px] sm:text-base leading-7 text-gray-700">
+          Chez Mondiale Home SN, la qualité n&apos;est pas une option, c&apos;est le fondement de notre sélection.
+          Forts de notre expertise Franco-Turque, nous avons tissé un réseau de fabricants qui partagent notre
+          engagement pour l&apos;excellence, vous garantissant des produits qui allient design, performance,
+          durabilité et qualité.
         </p>
-      </div>
+        <p className="text-[15.5px] sm:text-base leading-7 text-gray-700 font-medium">
+          Investir avec Mondiale Home SN, c&apos;est investir dans la durée.
+        </p>
+      </motion.div>
 
-      <div className="grid md:grid-cols-3 gap-8">
-        {[
-          {
-            icon: "🚚",
-            title: "Livraison Gratuite",
-            description: "À Dakar et banlieue"
-          },
-          {
-            icon: "🔧",
-            title: "Installation Comprise",
-            description: "Par nos équipes expertes"
-          },
-          {
-            icon: "🛡️",
-            title: "Garantie 2 Ans",
-            description: "Sur tous nos produits"
-          }
-        ].map((service, index) => (
-          <div key={index} className="text-center group">
-            <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent transition-colors duration-300">
-              <span className="text-2xl">{service.icon}</span>
-            </div>
-            <h4 className="text-lg font-semibold text-primary mb-2 group-hover:text-accent transition-colors">
-              {service.title}
-            </h4>
-            <p className="text-gray-600">
-              {service.description}
-            </p>
+      {/* Ligne de séparation avec accent orange */}
+      <motion.div variants={vItem} className="flex justify-center">
+        <div className="w-16 h-1 bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"></div>
+      </motion.div>
+
+      {/* sous-titre partenaires */}
+      <motion.div variants={vItem} className="text-center">
+        <span className="inline-block text-[13px] text-gray-700 font-medium border border-gray-200 rounded-lg px-4 py-2 bg-white/80">
+          Espace Partenaires &amp; Professionnels
+        </span>
+      </motion.div>
+
+      {/* bloc B2B amélioré */}
+      <motion.div
+        variants={vItem}
+        className="rounded-2xl border border-gray-200 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
+      >
+        <div className="p-8 sm:p-10">
+          <motion.h3
+            variants={vItem}
+            className="text-center text-[22px] sm:text-[24px] font-semibold text-gray-900 mb-8"
+          >
+            Partenariat B2B : Solutions d&apos;Ameublement et BTP pour les Professionnels
+          </motion.h3>
+
+          <motion.p
+            variants={vItem}
+            className="text-[15.5px] sm:text-base leading-7 text-gray-700 text-center max-w-3xl mx-auto mb-12"
+          >
+            Architecte, promoteur, ou chef de projet : vos chantiers exigent fiabilité, conformité et volumes.
+            Mondiale Home SN est structuré pour être l&apos;extension de votre équipe d&apos;approvisionnement
+            international, vous offrant un avantage compétitif crucial. Notre rôle : vous fournir des produits
+            hauts de gamme, une logistique sans faille et un support technique inégalé.
+          </motion.p>
+
+          {/* cartes améliorées */}
+          <div className="grid gap-8 sm:grid-cols-3">
+            <motion.div
+              variants={vCard}
+              className="h-full rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:border-orange-300 hover:shadow-md bg-white group"
+            >
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-orange-500/20 transition-colors">
+                  <span className="text-orange-600 font-bold text-sm">1</span>
+                </div>
+                <p className="font-semibold text-gray-900 text-lg">
+                  Le Volume et la Capacité d&apos;Approvisionnement
+                </p>
+              </div>
+              <ul className="list-disc pl-6 space-y-2 text-sm leading-6 text-gray-700">
+                <li>Accès Direct Usine : prix optimisés et capacité de production Turquie.</li>
+                <li>Offres Sur Mesure : catalogue et tarifs pros (sur demande).</li>
+              </ul>
+            </motion.div>
+
+            <motion.div
+              variants={vCard}
+              className="h-full rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:border-orange-300 hover:shadow-md bg-white group"
+            >
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-orange-500/20 transition-colors">
+                  <span className="text-orange-600 font-bold text-sm">2</span>
+                </div>
+                <p className="font-semibold text-gray-900 text-lg">
+                  Collaboration et Support Technique
+                </p>
+              </div>
+              <p className="text-sm leading-6 text-gray-700 pl-11">
+                Nous parlons le même langage technique que vous.
+              </p>
+            </motion.div>
+
+            <motion.div
+              variants={vCard}
+              className="h-full rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:border-orange-300 hover:shadow-md bg-white group"
+            >
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-orange-500/20 transition-colors">
+                  <span className="text-orange-600 font-bold text-sm">3</span>
+                </div>
+                <p className="font-semibold text-gray-900 text-lg">
+                  Logistique Maîtrisée pour les Chantiers
+                </p>
+              </div>
+              <p className="text-sm leading-6 text-gray-700 mb-3 pl-11">
+                Nous comprenons les impératifs des délais de construction.
+              </p>
+              <ul className="list-disc pl-14 space-y-2 text-sm leading-6 text-gray-700">
+                <li>Gestion des Conteneurs et Douanes complète.</li>
+                <li>Planification de Livraison selon l&apos;avancement du chantier.</li>
+              </ul>
+            </motion.div>
           </div>
-        ))}
-      </div>
-    </motion.div>
 
-    {/* Call to Action Final */}
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.6 }}
-      viewport={{ once: true }}
-      className="text-center mt-16"
-    >
-      <div className="flex flex-col sm:flex-row gap-6 justify-center">
-        <Link
-          href="/produits"
-          className="inline-flex items-center px-10 py-4 bg-primary text-white rounded-2xl hover:bg-primary/90 transition-colors font-semibold text-lg shadow-lg hover:shadow-xl"
-        >
-          Voir Tous les Produits
-          <ArrowRight className="ml-3 w-5 h-5" />
-        </Link>
-        <Link
-          href="/contact"
-          className="inline-flex items-center px-10 py-4 border-2 border-primary text-primary rounded-2xl hover:bg-primary hover:text-white transition-colors font-semibold text-lg"
-        >
-          Conseil Personnalisé
-        </Link>
-      </div>
+          {/* CTA amélioré */}
+          <motion.div variants={vItem} className="mt-12 text-center border-t border-gray-100 pt-8">
+            <h5 className="text-lg font-semibold text-gray-900 mb-2">Devenons Partenaires</h5>
+            <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
+              Vous avez un appel d&apos;offres ou un grand projet en cours ?
+            </p>
+            <a
+              href="/contact"
+              className="inline-flex items-center rounded-lg bg-orange-500 px-8 py-4 text-white font-medium transition-all duration-300 hover:bg-orange-600 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+            >
+              Contactez-nous dès aujourd&apos;hui pour une consultation et un accès à notre catalogue professionnel.
+            </a>
+          </motion.div>
+        </div>
+      </motion.div>
     </motion.div>
   </div>
 </section>
+
+
+
+
       {/* Featured Products Section */}
       {/* Showroom Products Section - Design Élégant */}
       {/* Showroom Section - Design Réorganisé et Embelli */}

@@ -8,7 +8,7 @@ import Image from 'next/image'
 const showroomImages = [
   {
     id: 1,
-    src: "/images/image1.jpeg",
+    src: "/images/sallenobele.png",
     alt: "Salon moderne avec canapé gris",
     title: "Salon Moderne",
     description: "Découvrez notre collection de salons contemporains",
@@ -16,7 +16,7 @@ const showroomImages = [
   },
   {
     id: 2,
-    src: "/images/image3.jpeg", 
+    src: "/images/NOBEL.png", 
     alt: "Chambre à coucher élégante",
     title: "Chambre Élégante",
     description: "Des chambres qui allient confort et style",
@@ -24,28 +24,13 @@ const showroomImages = [
   },
   {
     id: 3,
-    src: "/images/tables.jpeg",
+    src: "/images/salleamangenobel.png",
     alt: "Salle à manger familiale",
     title: "Salle à Manger",
     description: "L'art de recevoir avec nos tables et chaises",
     category: "Salle à Manger"
   },
-  {
-    id: 4,
-    src: "/images/salon.jpeg",
-    alt: "salon moderne équipée",
-    title: "salon Moderne",
-    description: "Des salons fonctionnelles et design",
-    category: "Salon"
-  },
-  {
-    id: 5,
-    src: "/images/image1.jpeg",
-    alt: "Bureau design pour télétravail",
-    title: "Espace Bureau",
-    description: "Créez votre espace de travail idéal",
-    category: "Bureau"
-  }
+ 
 ]
 
 const HeroCarousel = () => {
