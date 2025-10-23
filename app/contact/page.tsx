@@ -38,8 +38,8 @@ const contactInfo = [
     icon: Clock,
     title: 'Horaires d&apos;Ouverture',
     details: [
-      'Lun - Sam: 8h00 - 21h00',
-      'Dimanche: 9h00 - 17h00',
+      'Lun - Sam:  10h-19h30',
+     
       'Jours fériés: Fermé'
     ],
     action: 'Prendre RDV'
@@ -502,7 +502,7 @@ export default function ContactPage() {
                   <div className="text-center text-gray-500">
                     <MapPin className="w-16 h-16 mx-auto mb-4" />
                     <p className="text-lg font-semibold">Carte Interactive</p>
-                    <p className="text-sm">Rue de la République, Dakar</p>
+                    <p className="text-sm">Parcelle en face de l'arrêt BRT Police Parcelles</p>
                   </div>
                 </div>
                 <div className="absolute top-4 right-4">
@@ -532,8 +532,8 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-semibold text-primary mb-1">Adresse</h4>
                       <p className="text-gray-600">
-                        Rue de la République<br />
-                        Plateau, Dakar 12500<br />
+                        Parcelle en face de l'arrêt BRT Police Parcelles<br />
+                        Dakar, Sénégal<br />
                         Sénégal
                       </p>
                     </div>
@@ -544,22 +544,13 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-semibold text-primary mb-1">Horaires</h4>
                       <div className="text-gray-600 space-y-1">
-                        <p><span className="font-medium">Lun - Ven:</span> 8h00 - 19h00</p>
-                        <p><span className="font-medium">Samedi:</span> 9h00 - 18h00</p>
-                        <p><span className="font-medium">Dimanche:</span> 10h00 - 17h00</p>
+                        <p><span className="font-medium">Lundi - Samedi:</span>  10h-19h30</p>
+                        
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-accent/5 p-4 rounded-lg border border-accent/10">
-                    <h4 className="font-semibold text-accent mb-2">
-                      🚗 Accès & Parking
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      Parking gratuit disponible. Accessible en voiture, taxi ou transport en commun. 
-                      Arrêt de bus à 100m.
-                    </p>
-                  </div>
+                  
                 </div>
 
                 <div className="mt-8 pt-6 border-t border-gray-100">
@@ -592,7 +583,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-white">
+      {/* <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -662,7 +653,7 @@ export default function ContactPage() {
             </a>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

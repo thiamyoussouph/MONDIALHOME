@@ -407,7 +407,7 @@ export default function HomePage() {
               </h1>
 
               <p className="text-2xl text-gray-600 leading-relaxed max-w-4xl mx-auto font-light">
-                Découvrez l&apos;excellence du design sénégalais dans notre showroom de 500m².
+                Découvrez l&apos;excellence du design sénégalais dans notre showroom de 600m².
                 Chaque pièce raconte une histoire d&apos;artisanat et d&apos;innovation.
               </p>
             </div>
@@ -645,7 +645,7 @@ export default function HomePage() {
                   <span className="block text-accent">à Dakar</span>
                 </h2>
                 <p className="text-xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed">
-                  Plongez dans un univers de 500m² où chaque meuble prend vie.
+                  Plongez dans un univers de 600m² où chaque meuble prend vie.
                   Nos conseillers experts vous accompagnent pour créer l&apos;intérieur de vos rêves.
                 </p>
 
@@ -666,7 +666,7 @@ export default function HomePage() {
 
                 <div className="grid md:grid-cols-3 gap-8 text-center">
                   <div className="space-y-2">
-                    <div className="text-3xl font-bold text-accent">500m²</div>
+                    <div className="text-3xl font-bold text-accent">600m²</div>
                     <div className="text-gray-300">Espace d&apos;exposition</div>
                   </div>
                   <div className="space-y-2">
@@ -795,7 +795,7 @@ export default function HomePage() {
                   { number: "2500+", label: "Clients Satisfaits", icon: null },
                   { number: "98%", label: "Taux de Satisfaction", icon: null },
                   { number: "15+", label: "Années d'Expérience", icon: null },
-                  { number: "500m²", label: "Showroom à Dakar", icon: null }
+                  { number: "600m²", label: "Showroom à Dakar", icon: null }
                 ].map((stat, index) => (
                   <motion.div
                     key={index}
