@@ -213,21 +213,19 @@ export default function HomePage() {
       <HeroCarousel />
 
       {/* Categories Section */}
- <section className="relative bg-white py-16 sm:py-24">
-  {/* Arrière-plan très subtil (derrière le contenu) */}
-  <div
-    aria-hidden
-    className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-gray-50/50 to-white"
-  />
 
-  {/* Contenu */}
+{/* === SECTION B2B (COLLER ICI, DANS LE return) === */}
+<section className="relative py-24 bg-white">
+  {/* Arrière-plan très subtil */}
+  <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-white pointer-events-none -z-10" />
+
   <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
     <motion.div
       variants={vWrap}
-      initial="hidden"
+      initial={false}                 // évite le "blanc" sur mobile
       whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      className="space-y-10 sm:space-y-12"
+      viewport={{ once: true, amount: 0.25 }}
+      className="space-y-12"
     >
       {/* Marque minimaliste */}
       <motion.div variants={vItem} className="flex justify-center">
@@ -243,7 +241,7 @@ export default function HomePage() {
       {/* Titre + intro */}
       <motion.h2
         variants={vItem}
-        className="text-center text-[26px] sm:text-[34px] leading-[1.15] font-semibold text-gray-900"
+        className="text-center text-[28px] sm:text-[34px] leading-[1.15] font-semibold text-gray-900"
       >
         La Qualité Mondiale, <span className="text-gray-800">Notre Promesse Quotidienne</span>
       </motion.h2>
@@ -260,7 +258,7 @@ export default function HomePage() {
         </p>
       </motion.div>
 
-      {/* Ligne accent */}
+      {/* Ligne de séparation */}
       <motion.div variants={vItem} className="flex justify-center">
         <div className="w-16 h-1 bg-gradient-to-r from-orange-500 to-orange-400 rounded-full" />
       </motion.div>
@@ -277,26 +275,39 @@ export default function HomePage() {
         variants={vItem}
         className="rounded-2xl border border-gray-200 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
       >
-        <div className="p-6 sm:p-10">
+        <div className="p-8 sm:p-10">
           <motion.h3
             variants={vItem}
-            className="text-center text-[20px] sm:text-[24px] font-semibold text-gray-900 mb-6 sm:mb-8"
+            className="text-center text-[22px] sm:text-[24px] font-semibold text-gray-900 mb-8"
           >
             Partenariat B2B : Solutions d&apos;Ameublement et BTP pour les Professionnels
           </motion.h3>
 
           <motion.p
             variants={vItem}
-            className="text-[15.5px] sm:text-base leading-7 text-gray-700 text-center max-w-3xl mx-auto mb-10 sm:mb-12"
+            className="text-[15.5px] sm:text-base leading-7 text-gray-700 text-center max-w-3xl mx-auto mb-12"
           >
             Architecte, promoteur, ou chef de projet : vos chantiers exigent fiabilité, conformité et volumes.
             Mondiale Home SN est structuré pour être l&apos;extension de votre équipe d&apos;approvisionnement
             international, vous offrant un avantage compétitif crucial. Notre rôle : vous fournir des produits
             hauts de gamme, une logistique sans faille et un support technique inégalé.
           </motion.p>
+{/* --- Intertitre "Pourquoi Choisir..." (orange + marge bas) --- */}
+<div className="text-center">
+  <motion.h4
+    variants={vItem}
+    className="text-[15px] sm:text-xl font-semibold text-orange-500 tracking-wide"
+  >
+    Pourquoi Choisir Mondiale Home SN comme Partenaire ?
+  </motion.h4>
+
+  {/* petite barre orange + espace bas */}
+  <div className="mx-auto mt-2 mb-8 h-1 w-16 rounded-full bg-gradient-to-r from-orange-500 to-orange-400" />
+</div>
 
           {/* cartes */}
-          <div className="grid gap-6 sm:gap-8 sm:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-3">
+            {/* 1 */}
             <motion.div
               variants={vCard}
               className="h-full rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:border-orange-300 hover:shadow-md bg-white group"
@@ -305,16 +316,23 @@ export default function HomePage() {
                 <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-orange-500/20 transition-colors">
                   <span className="text-orange-600 font-bold text-sm">1</span>
                 </div>
-                <p className="font-semibold text-gray-900 text-base sm:text-lg">
+                <p className="font-semibold text-gray-900 text-lg">
                   Le Volume et la Capacité d&apos;Approvisionnement
                 </p>
               </div>
               <ul className="list-disc pl-6 space-y-2 text-sm leading-6 text-gray-700">
-                <li>Accès Direct Usine : prix optimisés et capacité de production Turquie.</li>
-                <li>Offres Sur Mesure : catalogue et tarifs pros (sur demande).</li>
+                <li>
+                  Accès Direct Usine : Bénéficiez de prix optimisés et de la capacité de production de nos usines
+                  partenaires en Turquie pour vos commandes en volume.
+                </li>
+                <li>
+                  Offres Sur Mesure : Nous vous proposons un catalogue et des tarifs dédiés aux professionnels
+                  (accessible sur demande) pour vous aider à maîtriser votre budget dès la phase d&apos;appel d&apos;offres.
+                </li>
               </ul>
             </motion.div>
 
+            {/* 2 */}
             <motion.div
               variants={vCard}
               className="h-full rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:border-orange-300 hover:shadow-md bg-white group"
@@ -323,7 +341,7 @@ export default function HomePage() {
                 <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-orange-500/20 transition-colors">
                   <span className="text-orange-600 font-bold text-sm">2</span>
                 </div>
-                <p className="font-semibold text-gray-900 text-base sm:text-lg">
+                <p className="font-semibold text-gray-900 text-lg">
                   Collaboration et Support Technique
                 </p>
               </div>
@@ -332,6 +350,7 @@ export default function HomePage() {
               </p>
             </motion.div>
 
+            {/* 3 */}
             <motion.div
               variants={vCard}
               className="h-full rounded-xl border border-gray-200 p-6 transition-all duration-300 hover:border-orange-300 hover:shadow-md bg-white group"
@@ -340,7 +359,7 @@ export default function HomePage() {
                 <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-orange-500/20 transition-colors">
                   <span className="text-orange-600 font-bold text-sm">3</span>
                 </div>
-                <p className="font-semibold text-gray-900 text-base sm:text-lg">
+                <p className="font-semibold text-gray-900 text-lg">
                   Logistique Maîtrisée pour les Chantiers
                 </p>
               </div>
@@ -348,14 +367,20 @@ export default function HomePage() {
                 Nous comprenons les impératifs des délais de construction.
               </p>
               <ul className="list-disc pl-14 space-y-2 text-sm leading-6 text-gray-700">
-                <li>Gestion des Conteneurs et Douanes complète.</li>
-                <li>Planification de Livraison selon l&apos;avancement du chantier.</li>
+                <li>
+                  Gestion des Conteneurs et Douanes : Nous assurons la gestion complète de la logistique, du départ
+                  usine au dédouanement à l&apos;arrivée, pour éviter les retards coûteux.
+                </li>
+                <li>
+                  Planification de Livraison : Nous coordonnons la livraison sur site pour qu&apos;elle corresponde
+                  à l&apos;avancement exact de votre chantier.
+                </li>
               </ul>
             </motion.div>
           </div>
 
           {/* CTA */}
-          <motion.div variants={vItem} className="mt-10 sm:mt-12 text-center border-t border-gray-100 pt-8">
+          <motion.div variants={vItem} className="mt-12 text-center border-t border-gray-100 pt-8">
             <h5 className="text-lg font-semibold text-gray-900 mb-2">Devenons Partenaires</h5>
             <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
               Vous avez un appel d&apos;offres ou un grand projet en cours ?
@@ -372,8 +397,7 @@ export default function HomePage() {
     </motion.div>
   </div>
 </section>
-
-
+{/* === FIN SECTION B2B === */}
 
 
 
