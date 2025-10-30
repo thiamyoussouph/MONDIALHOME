@@ -53,7 +53,7 @@ export const allProducts: Product[] = [
       "composé d’un Salon 8 places (3+3+1+1) + Table Basse + Meuble TV + Buffet et d’une salle à manger complète composée d’une table 6 places + 6 chaises + Buffet + Miroir.",
     price: null,
     originalPrice: null,
-    image: '/images/Sallenobele.png',
+    image: '/images/sallenobele.png',
     category: 'Salon',
     slug: 'salons-modernes',
     rating: 4.6,
