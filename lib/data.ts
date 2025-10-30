@@ -232,7 +232,7 @@ export const allProducts: Product[] = [
     description: 'en tissu haut de gamme originaire de Turquie. 8 Places (3+3+1+1)',
     price: null,
     originalPrice: null,
-    image: '/images/salonparis.png ',
+    image: '/images/salonparis.png',
     category: 'Salon',
     slug: 'salons-modernes',
     rating: 4.7,
