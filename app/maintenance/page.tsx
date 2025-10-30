@@ -106,7 +106,7 @@ export default function MaintenancePage() {
 
         {/* Footer */}
         <p className="mt-10 text-xs text-gray-500">
-          © {new Date().getFullYear()}  Active Solution. Tous droits réservés.
+          © {new Date().getFullYear()}  Active Solution. Tous droits réservés a bientôt.
         </p>
       </div>
 
