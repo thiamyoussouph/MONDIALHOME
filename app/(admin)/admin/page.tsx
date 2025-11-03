@@ -49,54 +49,42 @@ export default function AdminPage() {
   }
 
   // Écran de connexion
-  if (!session) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary-50 px-4">
-        <form
-          onSubmit={sendMagic}
-          className="w-full max-w-md bg-white rounded-2xl shadow-primary-lg p-8 border border-gray-100"
-        >
-          <h1 className="text-2xl font-bold text-primary mb-6">Admin — Connexion</h1>
+  // if (!session) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center bg-secondary-50 px-4">
+  //       <form
+  //         onSubmit={sendMagic}
+  //         className="w-full max-w-md bg-white rounded-2xl shadow-primary-lg p-8 border border-gray-100"
+  //       >
+  //         <h1 className="text-2xl font-bold text-primary mb-6">Admin — Connexion</h1>
 
-          <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="ton.email@domaine.com"
-            className="w-full rounded-xl border-gray-300 focus:ring-accent focus:border-accent px-4 py-3"
-          />
+  //         <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+  //         <input
+  //           type="email"
+  //           required
+  //           value={email}
+  //           onChange={(e) => setEmail(e.target.value)}
+  //           placeholder="ton.email@domaine.com"
+  //           className="w-full rounded-xl border-gray-300 focus:ring-accent focus:border-accent px-4 py-3"
+  //         />
 
-          <button
-            type="submit"
-            disabled={sending}
-            className="mt-6 w-full bg-accent text-white font-semibold rounded-xl py-3 shadow-accent-lg hover:brightness-95 transition"
-          >
-            {sending ? 'Envoi…' : 'Recevoir le lien magique'}
-          </button>
+  //         <button
+  //           type="submit"
+  //           disabled={sending}
+  //           className="mt-6 w-full bg-accent text-white font-semibold rounded-xl py-3 shadow-accent-lg hover:brightness-95 transition"
+  //         >
+  //           {sending ? 'Envoi…' : 'Recevoir le lien magique'}
+  //         </button>
 
-          {msg && <p className="mt-4 text-sm text-gray-700">{msg}</p>}
-        </form>
-      </div>
-    )
-  }
+  //         {msg && <p className="mt-4 text-sm text-gray-700">{msg}</p>}
+  //       </form>
+  //     </div>
+  //   )
+  // }
 
   // Tableau de bord
   return (
     <div className="pt-24 max-w-6xl mx-auto px-6">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-primary">Tableau de bord Admin</h1>
-          <p className="text-gray-600 mt-1">Connecté : {session.user?.email}</p>
-        </div>
-        <button
-          onClick={signOut}
-          className="px-4 py-2 border-2 border-gray-200 rounded-xl hover:border-accent hover:text-accent transition"
-        >
-          Se déconnecter
-        </button>
-      </div>
 
       <div className="grid sm:grid-cols-2 gap-6">
         <Link

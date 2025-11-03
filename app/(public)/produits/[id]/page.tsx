@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ZoomIn, Star, BadgeCheck, Package, Share2 } from 'lucide-react';
-import { getProductById, allProducts } from '../../../lib/data';
+import { getProductById, allProducts } from '../../../../lib/data';
 
 // types légers si besoin
 type PageProps = {
@@ -154,9 +154,8 @@ export default function ProductPage({ params }: PageProps) {
               <button
                 key={i}
                 onClick={() => setActiveIndex(i)}
-                className={`relative aspect-[4/3] rounded-xl overflow-hidden border transition ${
-                  i === activeIndex ? 'border-orange-500 shadow-md' : 'border-gray-200 hover:border-gray-300'
-                }`}
+                className={`relative aspect-[4/3] rounded-xl overflow-hidden border transition ${i === activeIndex ? 'border-orange-500 shadow-md' : 'border-gray-200 hover:border-gray-300'
+                  }`}
               >
                 <Image src={src} alt={`${product.name} ${i + 1}`} fill className="object-cover" />
               </button>
@@ -200,7 +199,7 @@ export default function ProductPage({ params }: PageProps) {
                           title: product.name,
                           url: typeof window !== 'undefined' ? window.location.href : '',
                         })
-                        .catch(() => {});
+                        .catch(() => { });
                     } else if (typeof window !== 'undefined') {
                       navigator.clipboard?.writeText(window.location.href);
                     }

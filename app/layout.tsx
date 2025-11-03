@@ -2,8 +2,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Header from './components/Header'
-import Footer from './components/Footer'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,15 +22,15 @@ export const metadata: Metadata = {
   description:
     "Mondialehome : N°1 des meubles de qualité au Sénégal. Salon, chambre, bureau, tables. Showroom 500m² à Dakar. Livraison gratuite. ✓ 15 ans d'expérience ✓ 2500+ clients satisfaits",
   keywords: [
-    'meubles sénégal','mobilier dakar','magasin meubles dakar','mondialehome',
-    'salon sénégal','chambre coucher dakar','tables chaises sénégal','bureau sénégal',
-    'canapé dakar','lit sénégal','armoire dakar','table manger sénégal',
-    'meubles plateau dakar','mobilier parcelles assainies','meubles almadies',
-    'showroom meubles dakar','magasin mobilier sénégal',
-    'meubles modernes sénégal','mobilier contemporain dakar','meubles design sénégal',
-    'salon moderne dakar','chambre moderne sénégal',
-    'livraison meubles dakar','montage meubles sénégal','garantie meubles dakar',
-    'meubles pas cher sénégal','discount meubles dakar','promo meubles sénégal'
+    'meubles sénégal', 'mobilier dakar', 'magasin meubles dakar', 'mondialehome',
+    'salon sénégal', 'chambre coucher dakar', 'tables chaises sénégal', 'bureau sénégal',
+    'canapé dakar', 'lit sénégal', 'armoire dakar', 'table manger sénégal',
+    'meubles plateau dakar', 'mobilier parcelles assainies', 'meubles almadies',
+    'showroom meubles dakar', 'magasin mobilier sénégal',
+    'meubles modernes sénégal', 'mobilier contemporain dakar', 'meubles design sénégal',
+    'salon moderne dakar', 'chambre moderne sénégal',
+    'livraison meubles dakar', 'montage meubles sénégal', 'garantie meubles dakar',
+    'meubles pas cher sénégal', 'discount meubles dakar', 'promo meubles sénégal'
   ],
   authors: [{ name: 'Mondialehome Sénégal' }],
   creator: 'Mondialehome',
@@ -141,9 +140,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     "longitude": -17.4467
                   },
                   "openingHoursSpecification": [
-                    { "@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens": "08:00","closes": "19:00" },
-                    { "@type": "OpeningHoursSpecification","dayOfWeek": "Saturday","opens": "08:00","closes": "19:00" },
-                    { "@type": "OpeningHoursSpecification","dayOfWeek": "Sunday","opens": "09:00","closes": "17:00" }
+                    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "19:00" },
+                    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "08:00", "closes": "19:00" },
+                    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "09:00", "closes": "17:00" }
                   ],
                   "sameAs": [
                     "https://www.facebook.com/mondialehome",
@@ -153,12 +152,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     "@type": "OfferCatalog",
                     "name": "Catalogue Mondialehome",
                     "itemListElement": [
-                      { "@type": "Offer","itemOffered": { "@type": "Product","name": "Meubles de salon","category": "Mobilier" } },
-                      { "@type": "Offer","itemOffered": { "@type": "Product","name": "Meubles de chambre","category": "Mobilier" } },
-                      { "@type": "Offer","itemOffered": { "@type": "Product","name": "Meubles de bureau","category": "Mobilier" } }
+                      { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Meubles de salon", "category": "Mobilier" } },
+                      { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Meubles de chambre", "category": "Mobilier" } },
+                      { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Meubles de bureau", "category": "Mobilier" } }
                     ]
                   },
-                  "aggregateRating": { "@type": "AggregateRating","ratingValue": "4.8","reviewCount": "2500","bestRating": "5","worstRating": "1" }
+                  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "2500", "bestRating": "5", "worstRating": "1" }
                 },
                 {
                   "@type": "WebSite",
@@ -170,7 +169,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   "inLanguage": "fr-SN",
                   "potentialAction": {
                     "@type": "SearchAction",
-                    "target": { "@type": "EntryPoint","urlTemplate": "https://mondialehomesn.com/search?q={search_term_string}" },
+                    "target": { "@type": "EntryPoint", "urlTemplate": "https://mondialehomesn.com/search?q={search_term_string}" },
                     "query-input": "required name=search_term_string"
                   }
                 }
@@ -188,9 +187,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* ❌ plus besoin de <link rel="canonical">, géré par alternates */}
       </head>
       <body className={`${inter.className} antialiased bg-gray-50 text-gray-900`} suppressHydrationWarning>
-        <Header />
         <main className="min-h-screen">{children}</main>
-        <Footer />
       </body>
     </html>
   )

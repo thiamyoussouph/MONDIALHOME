@@ -11,9 +11,9 @@ import {
   Headphones,
   Award,
 } from "lucide-react";
-import HeroCarousel from "./components/HeroCarousel";
-import { featuredProducts, type Product } from "../lib/data";
-import { allProducts } from "../lib/data";
+import HeroCarousel from "../components/HeroCarousel";
+import { featuredProducts, type Product } from "../../lib/data";
+import { allProducts } from "../../lib/data";
 
 const vWrap: Variants = {
   hidden: { opacity: 0, y: 12 },
