@@ -8,7 +8,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     return (
-        <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <div className="flex min-h-screen bg-gray-100 ">
             {/* Sidebar en grand écran */}
             <div className="hidden lg:block">
                 <AdminSidebar />
@@ -26,7 +26,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
             <div className="flex flex-col flex-1">
                 <AdminHeader />
-                <main className="flex-1 p-4">{children}</main>
+                <main className="">{children}</main>
             </div>
         </div>
     )

@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
         hostname: 'unsplash.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
       }
     ],
     domains: ['images.unsplash.com', 'unsplash.com'], // Fallback pour compatibilité
