@@ -1,49 +1,151 @@
 'use client';
 
-import { use, useMemo, useRef, useState } from 'react';
+import { use, useMemo, useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ZoomIn, Star, BadgeCheck, Package, Share2 } from 'lucide-react';
-import { getProductById, allProducts } from '../../../../lib/data';
+import { supaBrowser } from '@/lib/supabase';
 
-// types légers si besoin
 type PageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default function ProductPage({ params }: PageProps) {
-  // ✅ Next 15 (Client Component) : on déroule la promise avec use()
-  const { id } = use(params);
+interface ProductImage {
+  id: number;
+  url: string;
+  produitId: number;
+}
 
+interface Product {
+  id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  price: number | null;
+  originalPrice: number | null;
+  image: string;
+  category: number;
+  rating: number;
+  reviews: number;
+  badge: string | null;
+  inStock: boolean;
+  categories?: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+}
+
+export default function ProductPage({ params }: PageProps) {
+  const { id } = use(params);
   const router = useRouter();
 
-  // ton ancienne logique (synchrone depuis lib/data)
-  const product = getProductById(Number(id));
+  // États
+  const [product, setProduct] = useState<Product | null>(null);
+  const [productImages, setProductImages] = useState<ProductImage[]>([]);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // notFound() est server-only → on redirige proprement côté client
-  if (!product) {
-    // on évite un flash : on retourne null après la redirection
-    if (typeof window !== 'undefined') {
-      router.replace('/404'); // ou '/produits'
-    }
-    return null;
-  }
-
-  // galerie (même si une seule image)
-  const images = useMemo<string[]>(
-    () => [product.image].filter(Boolean) as string[],
-    [product.image]
-  );
-
+  // UI States
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-
-  // Zoom-on-hover (sans lib)
-  const zoomRef = useRef<HTMLDivElement | null>(null);
   const [bgPos, setBgPos] = useState('center');
+  const zoomRef = useRef<HTMLDivElement | null>(null);
 
+  // Récupérer le produit et ses données associées
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const supabase = supaBrowser();
+
+        // 1. Récupérer le produit + catégorie
+        const { data: productData, error: productError } = await supabase
+          .from("products")
+          .select(
+            `
+          *,
+          categories (
+            id,
+            name,
+            slug
+          )
+        `
+          )
+          .eq("id", id)
+          .single();
+
+        if (productError) {
+          if (productError.code === "PGRST116") {
+            setError("Produit non trouvé");
+            router.replace("/produits");
+            return;
+          }
+          throw productError;
+        }
+
+        setProduct(productData);
+
+        // 2. Images du produit
+        const { data: imagesData, error: imagesError } = await supabase
+          .from("images")
+          .select("*")
+          .eq("produitId", id)
+          .order("created_at", { ascending: true });
+
+        if (imagesError) throw imagesError;
+        setProductImages(imagesData || []);
+
+        // 3. Produits liés (même catégorie)
+        const categoryId = productData.category;
+
+        if (categoryId) {
+          const { data: relatedData, error: relatedError } = await supabase
+            .from("products")
+            .select(
+              `
+            *,
+            categories (
+              id,
+              name,
+              slug
+            )
+          `
+            )
+            .eq("category", categoryId)
+            .neq("id", id)
+            .limit(3);
+          console.log(relatedData);
+
+          if (relatedError) throw relatedError;
+          setRelatedProducts(relatedData || []);
+        }
+      } catch (err: any) {
+        console.error("Erreur récupération produit:", err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProduct();
+    }
+  }, [id, router]);
+
+  // Construire la galerie d'images (image principale + images additionnelles)
+  const images = useMemo<string[]>(() => {
+    if (!product) return [];
+    const allImages = [product.image, ...productImages.map(img => img.url)];
+    return allImages.filter(Boolean) as string[];
+  }, [product, productImages]);
+
+  // Zoom-on-hover
   const handleZoomMove = (e: React.MouseEvent) => {
     const el = zoomRef.current;
     if (!el) return;
@@ -53,14 +155,24 @@ export default function ProductPage({ params }: PageProps) {
     setBgPos(`${x}% ${y}%`);
   };
 
-  const related = useMemo(
-    () =>
-      allProducts
-        .filter((p) => p.category === product.category && p.id !== product.id)
-        .slice(0, 3),
-    [product.category, product.id]
-  );
+  // Chargement
+  if (isLoading) {
+    return (
+      <div className="pt-28 pb-20 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4" />
+          <p className="text-gray-600">Chargement du produit...</p>
+        </div>
+      </div>
+    );
+  }
 
+  // Erreur ou produit non trouvé
+  if (!product || error) {
+    return null; // Déjà redirigé vers /produits
+  }
+
+  // Bloc prix
   const priceBlock =
     product.price !== null ? (
       <div className="flex flex-col">
@@ -80,7 +192,7 @@ export default function ProductPage({ params }: PageProps) {
 
   return (
     <div className="pt-28 pb-20">
-      {/* Fil d’Ariane + retour */}
+      {/* Fil d'Ariane + retour */}
       <div className="max-w-6xl mx-auto px-6 mb-6">
         <Link href="/produits" className="inline-flex items-center text-gray-600 hover:text-gray-900">
           <ArrowLeft className="w-4 h-4 mr-2" /> Retour au catalogue
@@ -104,7 +216,7 @@ export default function ProductPage({ params }: PageProps) {
                 </span>
               )}
               <span className="px-3 py-1 rounded-full text-xs font-bold bg-orange-500/90 text-white shadow">
-                {product.category}
+                {product.categories?.name || 'Produit'}
               </span>
             </div>
 
@@ -149,24 +261,30 @@ export default function ProductPage({ params }: PageProps) {
           </motion.div>
 
           {/* Thumbnails */}
-          <div className="grid grid-cols-4 gap-3">
-            {images.map((src, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveIndex(i)}
-                className={`relative aspect-[4/3] rounded-xl overflow-hidden border transition ${i === activeIndex ? 'border-orange-500 shadow-md' : 'border-gray-200 hover:border-gray-300'
-                  }`}
-              >
-                <Image src={src} alt={`${product.name} ${i + 1}`} fill className="object-cover" />
-              </button>
-            ))}
-          </div>
+          {images.length >= 1 && (
+            <div className="grid grid-cols-4 gap-3">
+              {images.map((src, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveIndex(i)}
+                  className={`relative aspect-[4/3] rounded-xl overflow-hidden border transition ${i === activeIndex
+                    ? 'border-orange-500 shadow-md'
+                    : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                >
+                  <Image src={src} alt={`${product.name} ${i + 1}`} fill className="object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* ----- INFOS ----- */}
         <div className="space-y-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">{product.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+              {product.name}
+            </h1>
             <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
               <span className="inline-flex items-center gap-1 text-gray-700">
                 <Star className="w-4 h-4 text-amber-400 fill-current" />
@@ -179,12 +297,15 @@ export default function ProductPage({ params }: PageProps) {
               </span>
               <span className="text-gray-400">•</span>
               <span className="inline-flex items-center gap-1 text-gray-700">
-                <Package className="w-4 h-4 text-indigo-500" /> {product.inStock ? 'En stock' : 'Sur commande'}
+                <Package className="w-4 h-4 text-indigo-500" />{' '}
+                {product.inStock ? 'En stock' : 'Sur commande'}
               </span>
             </div>
           </div>
 
-          <p className="text-gray-700 text-base md:text-lg leading-relaxed">{product.description}</p>
+          <p className="text-gray-700 text-base md:text-lg leading-relaxed">
+            {product.description || 'Meuble de qualité supérieure pour votre intérieur.'}
+          </p>
 
           {/* Prix / devis + actions */}
           <div className="rounded-2xl border border-gray-200 p-6 bg-white shadow-sm">
@@ -240,13 +361,22 @@ export default function ProductPage({ params }: PageProps) {
 
           {/* CTAs secondaires */}
           <div className="flex flex-wrap gap-3">
-            <Link href="/produits" className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 transition">
+            <Link
+              href="/produits"
+              className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
+            >
               Voir tout le catalogue
             </Link>
-            <Link href="tel:+221784514040" className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 transition">
+            <Link
+              href="tel:+221784514040"
+              className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
+            >
               📞 Appeler un conseiller
             </Link>
-            <Link href="/contact" className="px-4 py-2 rounded-xl bg-gray-900 text-white hover:bg-black transition">
+            <Link
+              href="/contact"
+              className="px-4 py-2 rounded-xl bg-gray-900 text-white hover:bg-black transition"
+            >
               Prendre RDV au showroom
             </Link>
           </div>
@@ -254,11 +384,11 @@ export default function ProductPage({ params }: PageProps) {
       </div>
 
       {/* ----- PRODUITS LIÉS ----- */}
-      {related.length > 0 && (
+      {relatedProducts.length > 0 && (
         <div className="max-w-6xl mx-auto px-6 mt-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Dans la même catégorie</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {related.map((r) => (
+            {relatedProducts.map((r) => (
               <Link
                 key={r.id}
                 href={`/produits/${r.id}`}
@@ -278,7 +408,7 @@ export default function ProductPage({ params }: PageProps) {
                       </span>
                     )}
                     <span className="px-2.5 py-1 text-[11px] rounded-full bg-orange-500/90 text-white font-semibold">
-                      {r.category}
+                      {r.categories?.name || 'Produit'}
                     </span>
                   </div>
                 </div>
@@ -290,7 +420,9 @@ export default function ProductPage({ params }: PageProps) {
                       {r.rating}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">{r.description}</p>
+                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                    {r.description || 'Meuble de qualité'}
+                  </p>
                 </div>
               </Link>
             ))}
@@ -300,9 +432,17 @@ export default function ProductPage({ params }: PageProps) {
 
       {/* ----- LIGHTBOX ----- */}
       {lightboxOpen && (
-        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-6" onClick={() => setLightboxOpen(false)}>
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-6"
+          onClick={() => setLightboxOpen(false)}
+        >
           <div className="relative w-full max-w-5xl aspect-[16/10]">
-            <Image src={images[activeIndex]} alt={product.name} fill className="object-contain" />
+            <Image
+              src={images[activeIndex]}
+              alt={product.name}
+              fill
+              className="object-contain"
+            />
             <button
               onClick={() => setLightboxOpen(false)}
               className="absolute top-4 right-4 px-3 py-1.5 rounded-lg bg-white/90 text-gray-900 hover:bg-white font-semibold"
