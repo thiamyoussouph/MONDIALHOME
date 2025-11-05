@@ -1,30 +1,50 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X, ChevronDown, Search, Phone } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { categories as allCategories } from '@/lib/categories'
+import { supaBrowser } from '@/lib/supabase'
 
-// 👉 On déduplique par slug au cas où (ex: "salle-manger" apparaît 2x)
-function useNavCategories() {
-  return useMemo(() => {
-    const seen = new Set<string>()
-    return allCategories.filter(cat => {
-      if (seen.has(cat.slug)) return false
-      seen.add(cat.slug)
-      return true
-    })
-  }, [])
+interface Category {
+  id: number
+  name: string
+  slug: string
+  image: string
 }
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true)
 
-  const navCategories = useNavCategories()
+  // Récupérer les catégories depuis l'API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setIsLoadingCategories(true)
+        const supabase = supaBrowser()
+
+        const { data, error } = await supabase
+          .from('categories')
+          .select('id, name, slug, image')
+          .order('name', { ascending: true })
+
+        if (error) throw error
+
+        setCategories(data || [])
+      } catch (error) {
+        console.error('Erreur lors de la récupération des catégories:', error)
+      } finally {
+        setIsLoadingCategories(false)
+      }
+    }
+
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -33,9 +53,8 @@ export default function Header() {
   }, [])
 
   return (
-    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-sm'
-    }`}>
+    <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-sm'
+      }`}>
       {/* Top Bar */}
       <div className="bg-primary text-white py-2 px-4 text-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -57,16 +76,16 @@ export default function Header() {
             {/* Logo */}
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 relative rounded-full overflow-hidden bg-white">
-                <Image 
-                  src="/images/logo.png" 
-                  alt="Meubles Sénégal Logo" 
+                <Image
+                  src="/images/logo.png"
+                  alt="Meubles Sénégal Logo"
                   width={40}
                   height={40}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-primary">Mondiale Home SN</h1> 
+                <h1 className="text-xl font-bold text-primary">Mondiale Home SN</h1>
                 <p className="text-xs text-gray-600">Qualité & Design</p>
               </div>
             </div>
@@ -98,15 +117,27 @@ export default function Header() {
                       className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2"
                       onMouseLeave={() => setIsCategoriesOpen(false)}
                     >
-                      {navCategories.map((category) => (
-                        <Link
-                          key={category.slug}
-                          href={`/categories/${category.slug}`}
-                          className="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-accent transition-colors"
-                        >
-                          {category.name}
-                        </Link>
-                      ))}
+                      {isLoadingCategories ? (
+                        <div className="px-4 py-8 text-center text-gray-500">
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-accent mx-auto"></div>
+                          <p className="mt-2 text-sm">Chargement...</p>
+                        </div>
+                      ) : categories.length === 0 ? (
+                        <div className="px-4 py-8 text-center text-gray-500">
+                          <p className="text-sm">Aucune catégorie disponible</p>
+                        </div>
+                      ) : (
+                        categories.map((category) => (
+                          <Link
+                            key={category.id}
+                            href={`/categories/${category.slug}`}
+                            className="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-accent transition-colors"
+                            onClick={() => setIsCategoriesOpen(false)}
+                          >
+                            {category.name}
+                          </Link>
+                        ))
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -171,8 +202,8 @@ export default function Header() {
 
                 {/* Mobile Navigation */}
                 <nav className="space-y-4">
-                  <Link 
-                    href="/" 
+                  <Link
+                    href="/"
                     className="block text-lg font-medium text-gray-900 hover:text-accent"
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -182,23 +213,37 @@ export default function Header() {
                   <div className="space-y-2">
                     <p className="text-lg font-medium text-gray-900">Catégories</p>
                     <div className="pl-4 space-y-2">
-                      {navCategories.map((category) => (
-                        <Link
-                          key={category.slug}
-                          href={`/categories/${category.slug}`}
-                          className="block text-gray-600 hover:text-accent"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {category.name}
-                        </Link>
-                      ))}
+                      {isLoadingCategories ? (
+                        <p className="text-sm text-gray-500">Chargement...</p>
+                      ) : categories.length === 0 ? (
+                        <p className="text-sm text-gray-500">Aucune catégorie</p>
+                      ) : (
+                        categories.map((category) => (
+                          <Link
+                            key={category.id}
+                            href={`/categories/${category.slug}`}
+                            className="block text-gray-600 hover:text-accent"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {category.name}
+                          </Link>
+                        ))
+                      )}
                     </div>
                   </div>
 
-                  <Link href="/a-propos" className="block text-lg font-medium text-gray-900 hover:text-accent" onClick={() => setIsMenuOpen(false)}>
+                  <Link
+                    href="/a-propos"
+                    className="block text-lg font-medium text-gray-900 hover:text-accent"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     À Propos
                   </Link>
-                  <Link href="/contact" className="block text-lg font-medium text-gray-900 hover:text-accent" onClick={() => setIsMenuOpen(false)}>
+                  <Link
+                    href="/contact"
+                    className="block text-lg font-medium text-gray-900 hover:text-accent"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     Contact
                   </Link>
                 </nav>
