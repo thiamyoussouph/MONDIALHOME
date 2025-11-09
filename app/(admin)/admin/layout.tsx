@@ -1,33 +1,37 @@
-"use client"
+import { ReactNode } from "react";
+import { redirect } from "next/navigation";
+import { AdminSidebar } from "@/app/components/AdminSidebar";
+import { AdminHeader } from "@/app/components/AdminHeader";
+import { createServerSupabase } from "@/lib/supabase/server";
 
-import { ReactNode, useState } from "react"
-import { AdminSidebar } from "../../components/AdminSidebar"
-import { AdminHeader } from "../../components/AdminHeader"
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+    // ✅ Client Supabase côté serveur
+    const supabase = createServerSupabase();
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+    // ✅ Récupération de l'utilisateur connecté
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    console.log("Utilisateur connecté :", user);
+
+    // ✅ Redirection si pas connecté
+    if (!user) {
+        redirect("/auth");
+    }
 
     return (
-        <div className="flex min-h-screen bg-gray-100 ">
-            {/* Sidebar en grand écran */}
+        <div className="flex min-h-screen bg-gray-100">
+            {/* Sidebar grande écran */}
             <div className="hidden lg:block">
                 <AdminSidebar />
             </div>
 
-            {/* Sidebar mobile (sheet) */}
-            {sidebarOpen && (
-                <div className="fixed inset-0 z-40 flex lg:hidden">
-                    <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
-                    <div className="relative z-50 w-64 bg-white dark:bg-gray-800">
-                        <AdminSidebar />
-                    </div>
-                </div>
-            )}
-
+            {/* Contenu principal */}
             <div className="flex flex-col flex-1">
                 <AdminHeader />
-                <main className="">{children}</main>
+                <main className="p-6">{children}</main>
             </div>
         </div>
-    )
+    );
 }

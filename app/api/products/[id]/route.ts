@@ -2,25 +2,36 @@ import { NextRequest, NextResponse } from 'next/server';
 import cloudinary from '@/lib/cloudinary';
 import { supaBrowser } from '@/lib/supabase';
 
-// GET : Récupérer un produit
+// Helper
+async function getParams(context: { params: Promise<{ id: string }> }) {
+    return await context.params;
+}
+
+/* =========================================================
+   ✅ GET — Récupérer un produit
+========================================================= */
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await getParams(context);
+
     try {
         const supabase = supaBrowser();
 
         const { data: product, error } = await supabase
             .from('products')
-            .select(`
+            .select(
+                `
         *,
         categories (
           id,
           name,
           slug
         )
-      `)
-            .eq('id', params.id)
+      `
+            )
+            .eq('id', id)
             .single();
 
         if (error) throw error;
@@ -41,11 +52,15 @@ export async function GET(
     }
 }
 
-// PUT : Mettre à jour un produit
+/* =========================================================
+   ✅ PUT — Modifier un produit
+========================================================= */
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await getParams(context);
+
     try {
         const formData = await request.formData();
         const supabase = supaBrowser();
@@ -62,7 +77,7 @@ export async function PUT(
         const { data: existingProduct, error: fetchError } = await supabase
             .from('products')
             .select('*')
-            .eq('id', params.id)
+            .eq('id', id)
             .single();
 
         if (fetchError || !existingProduct) {
@@ -74,7 +89,7 @@ export async function PUT(
 
         let imageUrl = existingProduct.image;
 
-        // Upload nouvelle image si fournie
+        // ✅ Upload image si nouvelle
         if (imageFile) {
             const bytes = await imageFile.arrayBuffer();
             const buffer = Buffer.from(bytes);
@@ -99,24 +114,24 @@ export async function PUT(
 
             imageUrl = uploadResult.secure_url;
 
-            // Supprimer l'ancienne image
-            const oldPublicId = existingProduct.image
-                .split('/')
-                .slice(-2)
-                .join('/')
-                .split('.')[0];
-
+            // ✅ Supprimer ancienne image
             try {
+                const oldPublicId = existingProduct.image
+                    .split('/')
+                    .slice(-2)
+                    .join('/')
+                    .split('.')[0];
+
                 await cloudinary.uploader.destroy(oldPublicId);
-            } catch (deleteError) {
-                console.warn('⚠️ Erreur suppression ancienne image:', deleteError);
+            } catch (err) {
+                console.warn('⚠️ Impossible de supprimer ancienne image');
             }
         }
 
-        // Préparer les données de mise à jour
+        // ✅ Mise à jour
         const updateData: any = {
             image: imageUrl,
-            in_stock: inStock
+            in_stock: inStock,
         };
 
         if (name) updateData.name = name;
@@ -129,7 +144,7 @@ export async function PUT(
         const { data: updatedProduct, error: updateError } = await supabase
             .from('products')
             .update(updateData)
-            .eq('id', params.id)
+            .eq('id', id)
             .select()
             .single();
 
@@ -137,7 +152,7 @@ export async function PUT(
 
         return NextResponse.json({
             success: true,
-            product: updatedProduct
+            product: updatedProduct,
         });
 
     } catch (error: any) {
@@ -148,18 +163,22 @@ export async function PUT(
     }
 }
 
-// DELETE : Supprimer un produit
+/* =========================================================
+   ✅ DELETE — Supprimer un produit
+========================================================= */
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await getParams(context);
+
     try {
         const supabase = supaBrowser();
 
         const { data: product, error: fetchError } = await supabase
             .from('products')
             .select('*')
-            .eq('id', params.id)
+            .eq('id', id)
             .single();
 
         if (fetchError || !product) {
@@ -169,29 +188,27 @@ export async function DELETE(
             );
         }
 
-        // Supprimer l'image de Cloudinary
-        const publicId = product.image
-            .split('/')
-            .slice(-2)
-            .join('/')
-            .split('.')[0];
-
+        // ✅ Supprimer image
         try {
+            const publicId = product.image
+                .split('/')
+                .slice(-2)
+                .join('/')
+                .split('.')[0];
+
             await cloudinary.uploader.destroy(publicId);
-        } catch (deleteError) {
-            console.warn('⚠️ Erreur suppression image:', deleteError);
-        }
+        } catch { }
 
         const { error: deleteError } = await supabase
             .from('products')
             .delete()
-            .eq('id', params.id);
+            .eq('id', id);
 
         if (deleteError) throw deleteError;
 
         return NextResponse.json({
             success: true,
-            message: 'Produit supprimé avec succès'
+            message: 'Produit supprimé avec succès',
         });
 
     } catch (error: any) {

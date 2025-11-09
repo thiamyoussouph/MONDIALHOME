@@ -2,16 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import cloudinary from '@/lib/cloudinary';
 import { supaBrowser } from '@/lib/supabase';
 
-// GET : Récupérer une catégorie
+// ✅ Helper pour extraire params.id correctement
+async function getParams(context: { params: Promise<{ id: string }> }) {
+    return await context.params;
+}
+
+/* =========================================================
+   ✅ GET — Récupérer une catégorie par ID
+========================================================= */
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await getParams(context);
+
     try {
         const { data: category, error } = await supaBrowser()
             .from('categories')
             .select('*')
-            .eq('id', params.id)
+            .eq('id', id)
             .single();
 
         if (error) throw error;
@@ -32,11 +41,15 @@ export async function GET(
     }
 }
 
-// PUT : Mettre à jour une catégorie
+/* =========================================================
+   ✅ PUT — Modifier une catégorie
+========================================================= */
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await getParams(context);
+
     try {
         const formData = await request.formData();
 
@@ -44,13 +57,11 @@ export async function PUT(
         const description = formData.get('description') as string;
         const imageFile = formData.get('image') as File | null;
 
-        const categoryId = params.id;
-
-        // Récupérer la catégorie existante
+        // ✅ 1— Vérifier existance catégorie
         const { data: existingCategory, error: fetchError } = await supaBrowser()
             .from('categories')
             .select('*')
-            .eq('id', categoryId)
+            .eq('id', id)
             .single();
 
         if (fetchError || !existingCategory) {
@@ -62,11 +73,8 @@ export async function PUT(
 
         let imageUrl = existingCategory.image;
 
-        // Si une nouvelle image est fournie
+        // ✅ 2— Upload d'une nouvelle image
         if (imageFile) {
-            console.log('📤 Upload nouvelle image...');
-
-            // Upload nouvelle image
             const bytes = await imageFile.arrayBuffer();
             const buffer = Buffer.from(bytes);
 
@@ -90,7 +98,7 @@ export async function PUT(
 
             imageUrl = uploadResult.secure_url;
 
-            // Supprimer l'ancienne image de Cloudinary
+            // ✅ 3— Supprimer ancienne image
             const oldPublicId = existingCategory.image
                 .split('/')
                 .slice(-2)
@@ -99,13 +107,10 @@ export async function PUT(
 
             try {
                 await cloudinary.uploader.destroy(oldPublicId);
-                console.log('🗑️ Ancienne image supprimée');
-            } catch (deleteError) {
-                console.warn('⚠️ Erreur suppression ancienne image:', deleteError);
-            }
+            } catch { }
         }
 
-        // Mettre à jour dans Supabase
+        // ✅ 4— Mise à jour DB
         const updateData: any = {
             image: imageUrl
         };
@@ -116,7 +121,7 @@ export async function PUT(
         const { data: updatedCategory, error: updateError } = await supaBrowser()
             .from('categories')
             .update(updateData)
-            .eq('id', categoryId)
+            .eq('id', id)
             .select()
             .single();
 
@@ -130,23 +135,27 @@ export async function PUT(
     } catch (error: any) {
         console.error('❌ Erreur mise à jour:', error);
         return NextResponse.json(
-            { error: error.message || 'Erreur lors de la mise à jour' },
+            { error: error.message ?? 'Erreur lors de la mise à jour' },
             { status: 500 }
         );
     }
 }
 
-// DELETE : Supprimer une catégorie
+/* =========================================================
+   ✅ DELETE — Supprimer une catégorie
+========================================================= */
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await getParams(context);
+
     try {
-        // Récupérer la catégorie
+        // ✅ Vérifier existance
         const { data: category, error: fetchError } = await supaBrowser()
             .from('categories')
             .select('*')
-            .eq('id', params.id)
+            .eq('id', id)
             .single();
 
         if (fetchError || !category) {
@@ -156,7 +165,7 @@ export async function DELETE(
             );
         }
 
-        // Supprimer l'image de Cloudinary
+        // ✅ Supprimer image Cloudinary
         const publicId = category.image
             .split('/')
             .slice(-2)
@@ -165,16 +174,13 @@ export async function DELETE(
 
         try {
             await cloudinary.uploader.destroy(publicId);
-            console.log('🗑️ Image supprimée de Cloudinary');
-        } catch (deleteError) {
-            console.warn('⚠️ Erreur suppression image:', deleteError);
-        }
+        } catch { }
 
-        // Supprimer de Supabase
+        // ✅ Supprimer en DB
         const { error: deleteError } = await supaBrowser()
             .from('categories')
             .delete()
-            .eq('id', params.id);
+            .eq('id', id);
 
         if (deleteError) throw deleteError;
 
@@ -185,7 +191,7 @@ export async function DELETE(
 
     } catch (error: any) {
         return NextResponse.json(
-            { error: error.message || 'Erreur lors de la suppression' },
+            { error: error.message ?? 'Erreur lors de la suppression' },
             { status: 500 }
         );
     }
