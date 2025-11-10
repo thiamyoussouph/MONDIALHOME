@@ -25,7 +25,7 @@ export function AdminSidebar() {
 
             <aside
                 className={`
-          h-full w-48 p-4 bg-white text-gray-800 z-50
+          h-full w-48 p-4 bg-white   text-gray-800 z-50
           border-r shadow transform transition-transform
           ${open ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
@@ -37,7 +37,9 @@ export function AdminSidebar() {
                         href="/admin"
                         className="text-2xl font-bold text-blue-600 tracking-wide"
                     >
-                        LOGO
+                        <img src="/images/logo.png" alt="Logo"  width={48} height={48} 
+               
+    className="rounded-full border-2 border-accent-600 shadow-md hover:scale-110 transition-transform"/>
                     </Link>
                 </div>
 

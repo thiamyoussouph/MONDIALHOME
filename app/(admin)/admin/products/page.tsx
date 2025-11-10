@@ -91,7 +91,7 @@ export default function ProductsPage() {
                                 </h2>
                                 <button
                                     onClick={handleNewProduct}
-                                    className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
+                                    className="px-4 py-2 bg-accent-600 text-white text-sm rounded-lg hover:bg-accent transition"
                                 >
                                     + Nouveau
                                 </button>

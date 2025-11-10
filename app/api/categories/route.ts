@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import cloudinary from '@/lib/cloudinary';
+// 📴 IMAGE: désactivé pour l’instant
+// import cloudinary from '@/lib/cloudinary';
 import { supaBrowser } from '@/lib/supabase';
 
 // Fonction pour générer un slug
@@ -21,15 +22,17 @@ export async function POST(request: NextRequest) {
 
         const name = formData.get('name') as string;
         const description = formData.get('description') as string;
-        const imageFile = formData.get('image') as File;
 
-        // Validation
-        if (!name || !imageFile) {
-            return NextResponse.json(
-                { error: 'Le nom et l\'image sont obligatoires' },
-                { status: 400 }
-            );
-        }
+        // 📴 IMAGE: récupération du fichier désactivée
+        // const imageFile = formData.get('image') as File;
+
+        // 📴 IMAGE: validations liées à l’image désactivées
+        // if (!name || !imageFile) {
+        //     return NextResponse.json(
+        //         { error: 'Le nom et l\'image sont obligatoires' },
+        //         { status: 400 }
+        //     );
+        // }
 
         // Générer le slug
         const slug = generateSlug(name);
@@ -48,32 +51,30 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 1️⃣ UPLOAD IMAGE VERS CLOUDINARY
-        console.log('📤 Upload image vers Cloudinary...');
-        const bytes = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        const uploadResult = await new Promise<any>((resolve, reject) => {
-            cloudinary.uploader.upload_stream(
-                {
-                    folder: 'categories',
-                    resource_type: 'image',
-                    transformation: [
-                        { width: 600, height: 600, crop: 'fill' },
-                        { quality: 'auto' },
-                        { fetch_format: 'auto' }
-                    ]
-                },
-                (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                }
-            ).end(buffer);
-        });
-
-        const imageUrl = uploadResult.secure_url;
-        const publicId = uploadResult.public_id;
-        console.log('✅ Image uploadée:', imageUrl);
+        // 📴 IMAGE: tout l’UPLOAD Cloudinary est désactivé
+        // console.log('📤 Upload image vers Cloudinary...');
+        // const bytes = await imageFile.arrayBuffer();
+        // const buffer = Buffer.from(bytes);
+        // const uploadResult = await new Promise<any>((resolve, reject) => {
+        //     cloudinary.uploader.upload_stream(
+        //         {
+        //             folder: 'categories',
+        //             resource_type: 'image',
+        //             transformation: [
+        //                 { width: 600, height: 600, crop: 'fill' },
+        //                 { quality: 'auto' },
+        //                 { fetch_format: 'auto' }
+        //             ]
+        //         },
+        //         (error, result) => {
+        //             if (error) reject(error);
+        //             else resolve(result);
+        //         }
+        //     ).end(buffer);
+        // });
+        // const imageUrl = uploadResult.secure_url;
+        // const publicId = uploadResult.public_id;
+        // console.log('✅ Image uploadée:', imageUrl);
 
         // 2️⃣ CRÉER LA CATÉGORIE DANS SUPABASE
         console.log('💾 Création de la catégorie dans Supabase...');
@@ -82,7 +83,8 @@ export async function POST(request: NextRequest) {
             .insert({
                 name,
                 slug,
-                image: imageUrl,
+                // 📴 IMAGE: on n’enregistre pas d’URL d’image
+                // image: imageUrl,
                 description: description || '',
             })
             .select()
@@ -90,8 +92,8 @@ export async function POST(request: NextRequest) {
 
         if (insertError) {
             console.error('Erreur Supabase:', insertError);
-            // Supprimer l'image de Cloudinary en cas d'erreur
-            await cloudinary.uploader.destroy(publicId);
+            // 📴 IMAGE: rollback Cloudinary désactivé
+            // await cloudinary.uploader.destroy(publicId);
             throw insertError;
         }
 
@@ -100,10 +102,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             category,
-            cloudinary: {
-                publicId,
-                url: imageUrl
-            }
+            // 📴 IMAGE: ne pas retourner d’infos Cloudinary
+            // cloudinary: {
+            //     publicId,
+            //     url: imageUrl
+            // }
         }, { status: 201 });
 
     } catch (error: any) {
