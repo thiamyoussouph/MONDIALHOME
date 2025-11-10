@@ -276,7 +276,7 @@ export default function CategoryForm({
                     type="submit"
                     disabled={isSubmitting }
                     // || (!isEditing && !imageFile)
-                    className="flex-1 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition flex items-center justify-center"
+                    className="flex-1 px-6 py-3 bg-accent-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition flex items-center justify-center"
                 >
                     {isSubmitting ? (
                         <>
