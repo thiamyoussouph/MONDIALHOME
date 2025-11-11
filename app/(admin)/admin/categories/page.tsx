@@ -75,7 +75,7 @@ export default function CategoriesPage() {
                                 </h2>
                                 <button
                                     onClick={handleNewCategory}
-                                    className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
+                                    className="px-4 py-2 bg-accent-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
                                 >
                                     + Nouveau
                                 </button>
@@ -100,14 +100,14 @@ export default function CategoriesPage() {
                                         >
                                             <div className="flex items-start gap-3">
                                                 {/* Miniature */}
-                                                <div className="relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden">
+                                                {/* <div className="relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden">
                                                     <Image
                                                         src={category.image}
                                                         alt={category.name}
                                                         fill
                                                         className="object-cover"
                                                     />
-                                                </div>
+                                                </div> */}
 
                                                 {/* Infos */}
                                                 <div className="flex-1 min-w-0">
@@ -187,7 +187,7 @@ export default function CategoriesPage() {
                                         ? {
                                             name: selectedCategory.name,
                                             description: selectedCategory.description,
-                                            image: selectedCategory.image,
+                                            // image: selectedCategory.image,
                                         }
                                         : undefined
                                 }

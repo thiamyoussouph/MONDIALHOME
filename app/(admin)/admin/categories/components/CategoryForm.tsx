@@ -8,7 +8,7 @@ interface CategoryFormProps {
     initialData?: {
         name: string;
         description: string;
-        image: string;
+        // image: string;
     };
     onSuccess?: () => void;
     onCancel?: () => void;
@@ -27,9 +27,9 @@ export default function CategoryForm({
         description: initialData?.description || '',
     });
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(
-        initialData?.image || null
-    );
+    // const [imagePreview, setImagePreview] = useState<string | null>(
+    //     initialData?.image || null
+    // );
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -41,8 +41,8 @@ export default function CategoryForm({
                 name: initialData.name,
                 description: initialData.description,
             });
-            setImagePreview(initialData.image);
-            setImageFile(null);
+            // setImagePreview(initialData.image);
+            // setImageFile(null);
         } else {
             resetForm();
         }
@@ -53,34 +53,34 @@ export default function CategoryForm({
     const resetForm = () => {
         setFormData({ name: '', description: '' });
         setImageFile(null);
-        setImagePreview(null);
+        // setImagePreview(null);
         setError(null);
         setSuccess(false);
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            if (!file.type.startsWith('image/')) {
-                setError('Veuillez sélectionner une image valide');
-                return;
-            }
+    // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = e.target.files?.[0];
+    //     if (file) {
+    //         if (!file.type.startsWith('image/')) {
+    //             setError('Veuillez sélectionner une image valide');
+    //             return;
+    //         }
 
-            if (file.size > 5 * 1024 * 1024) {
-                setError('L\'image ne doit pas dépasser 5MB');
-                return;
-            }
+    //         if (file.size > 5 * 1024 * 1024) {
+    //             setError('L\'image ne doit pas dépasser 5MB');
+    //             return;
+    //         }
 
-            setImageFile(file);
-            setError(null);
+    //         setImageFile(file);
+    //         setError(null);
 
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             setImagePreview(reader.result as string);
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -90,10 +90,10 @@ export default function CategoryForm({
         //     return;
         // }
 
-        if (!formData.name.trim()) {
-            setError('Le nom est obligatoire');
-            return;
-        }
+        // if (!formData.name.trim()) {
+        //     setError('Le nom est obligatoire');
+        //     return;
+        // }
 
         setIsSubmitting(true);
         setError(null);
@@ -103,9 +103,9 @@ export default function CategoryForm({
             const formDataToSend = new FormData();
             formDataToSend.append('name', formData.name);
             formDataToSend.append('description', formData.description);
-            if (imageFile) {
-                formDataToSend.append('image', imageFile);
-            }
+            // if (imageFile) {
+            //     formDataToSend.append('image', imageFile);
+            // }
 
             const url = isEditing ? `/api/categories/${categoryId}` : '/api/categories';
             const method = isEditing ? 'PUT' : 'POST';
@@ -213,7 +213,7 @@ export default function CategoryForm({
             </div>
 
             {/* Image */}
-            <div>
+            {/* <div>
                 <label className="block text-sm font-medium mb-2">
                     Image de la catégorie{' '}
                     {!isEditing && <span className="text-red-500">*</span>}
@@ -268,7 +268,7 @@ export default function CategoryForm({
                         disabled={isSubmitting}
                     />
                 </label>
-            </div>
+            </div> */}
 
             {/* Boutons */}
             <div className="flex gap-3 pt-4">

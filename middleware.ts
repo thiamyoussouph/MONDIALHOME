@@ -1,6 +1,10 @@
 import { NextResponse, NextRequest } from 'next/server'
 
-const PUBLIC = ['/maintenance','/favicon.ico','/robots.txt','/sitemap.xml','/_next','/images','/assets']
+const PUBLIC = ['/maintenance','/favicon.ico','/robots.txt','/sitemap.xml','/_next','/images','/assets',
+  '/admin',        // dashboard d’admin
+  '/api',          // endpoints (création produit, upload image, auth, etc.)
+  '/auth'      // pages d’auth (login, callback, etc.)
+]
 
 export function middleware(req: NextRequest) {
   const url = req.nextUrl
