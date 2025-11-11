@@ -85,10 +85,10 @@ export default function CategoryForm({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!isEditing && !imageFile) {
-            setError('Veuillez sélectionner une image');
-            return;
-        }
+        // if (!isEditing && !imageFile) {
+        //     setError('Veuillez sélectionner une image');
+        //     return;
+        // }
 
         if (!formData.name.trim()) {
             setError('Le nom est obligatoire');
@@ -274,7 +274,7 @@ export default function CategoryForm({
             <div className="flex gap-3 pt-4">
                 <button
                     type="submit"
-                    disabled={isSubmitting || (!isEditing && !imageFile)}
+                    // disabled={isSubmitting || (!isEditing && !imageFile)}
                     className="flex-1 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition flex items-center justify-center"
                 >
                     {isSubmitting ? (

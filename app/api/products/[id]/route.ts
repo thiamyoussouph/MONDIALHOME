@@ -65,51 +65,51 @@ export async function PUT(
         const formData = await request.formData();
         const supabase = supaBrowser();
 
-        const name = formData.get('name') as string;
-        const description = formData.get('description') as string;
-        const price = formData.get('price') as string;
-        const originalPrice = formData.get('original_price') as string;
-        const categoryId = formData.get('category_id') as string;
-        const badge = formData.get('badge') as string;
-        const inStock = formData.get('in_stock') === 'true';
-        const imageFile = formData.get('image') as File | null;
+        const name = formData.get("name") as string;
+        const description = formData.get("description") as string;
+        const price = formData.get("price") as string;
+        const originalPrice = formData.get("original_price") as string;
+        const categoryId = formData.get("category_id") as string;
+        const badge = formData.get("badge") as string;
+        const inStock = formData.get("in_stock") === "true";
+        const imageFile = formData.get("image") as File | null;
 
+        // ✅ Check product existence
         const { data: existingProduct, error: fetchError } = await supabase
-            .from('products')
-            .select('*')
-            .eq('id', id)
+            .from("products")
+            .select("*")
+            .eq("id", id)
             .single();
 
         if (fetchError || !existingProduct) {
-            return NextResponse.json(
-                { error: 'Produit non trouvé' },
-                { status: 404 }
-            );
+            return NextResponse.json({ error: "Produit non trouvé" }, { status: 404 });
         }
 
         let imageUrl = existingProduct.image;
 
-        // ✅ Upload image si nouvelle
+        // ✅ Upload new image
         if (imageFile) {
             const bytes = await imageFile.arrayBuffer();
             const buffer = Buffer.from(bytes);
 
             const uploadResult = await new Promise<any>((resolve, reject) => {
-                cloudinary.uploader.upload_stream(
-                    {
-                        folder: 'products',
-                        resource_type: 'image',
-                        transformation: [
-                            { width: 800, height: 800, crop: 'fill' },
-                            { quality: 'auto' },
-                            { fetch_format: 'auto' }
-                        ]
-                    },
-                    (error, result) => {
-                        if (error) reject(error);
-                        else resolve(result);
-                    }
-                ).end(buffer);
+                cloudinary.uploader
+                    .upload_stream(
+                        {
+                            folder: "products",
+                            resource_type: "image",
+                            transformation: [
+                                { width: 800, height: 800, crop: "fill" },
+                                { quality: "auto" },
+                                { fetch_format: "auto" },
+                            ],
+                        },
+                        (error, result) => {
+                            if (error) reject(error);
+                            else resolve(result);
+                        }
+                    )
+                    .end(buffer);
             });
 
             imageUrl = uploadResult.secure_url;
@@ -117,44 +117,51 @@ export async function PUT(
             // ✅ Supprimer ancienne image
             try {
                 const oldPublicId = existingProduct.image
-                    .split('/')
+                    ?.split("/")
                     .slice(-2)
-                    .join('/')
-                    .split('.')[0];
+                    .join("/")
+                    .split(".")[0];
 
-                await cloudinary.uploader.destroy(oldPublicId);
+                if (oldPublicId) {
+                    await cloudinary.uploader.destroy(oldPublicId);
+                }
             } catch (err) {
-                console.warn('⚠️ Impossible de supprimer ancienne image');
+                console.warn("⚠️ Impossible de supprimer l’ancienne image");
             }
         }
 
-        // ✅ Mise à jour
+        // ✅ Build update object
         const updateData: any = {
             image: imageUrl,
-            in_stock: inStock,
+            inStock: inStock,
         };
 
         if (name) updateData.name = name;
         if (description !== undefined) updateData.description = description || null;
         if (price) updateData.price = parseFloat(price);
-        if (originalPrice) updateData.original_price = parseFloat(originalPrice);
-        if (categoryId) updateData.category_id = parseInt(categoryId);
+
+        // ✅ Correct DB column: originalPrice
+        if (originalPrice) updateData.originalPrice = parseFloat(originalPrice);
+
+        // ✅ Correct DB column: category
+        if (categoryId) updateData.category = parseInt(categoryId);
+
         if (badge !== undefined) updateData.badge = badge || null;
 
+        // ✅ DB update
         const { data: updatedProduct, error: updateError } = await supabase
-            .from('products')
+            .from("products")
             .update(updateData)
-            .eq('id', id)
+            .eq("id", id)
             .select()
             .single();
 
         if (updateError) throw updateError;
 
-        return NextResponse.json({
-            success: true,
-            product: updatedProduct,
-        });
-
+        return NextResponse.json(
+            { success: true, product: updatedProduct },
+            { status: 200 }
+        );
     } catch (error: any) {
         return NextResponse.json(
             { error: error.message },
@@ -162,6 +169,7 @@ export async function PUT(
         );
     }
 }
+
 
 /* =========================================================
    ✅ DELETE — Supprimer un produit

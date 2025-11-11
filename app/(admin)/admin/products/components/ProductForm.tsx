@@ -50,15 +50,15 @@ export default function ProductForm({
     useEffect(() => {
         if (initialData) {
             setFormData({
-                name: initialData.name,
-                description: initialData.description,
-                price: initialData.price?.toString() || '',
-                original_price: initialData.original_price?.toString() || '',
-                category_id: initialData.category_id?.toString() || '',
+                name: initialData.name || '',
+                description: initialData.description || '',
+                price: initialData.price?.toString() ?? '',
+                original_price: initialData.original_price?.toString() ?? '',
+                category_id: initialData.category_id?.toString() ?? '',
                 badge: initialData.badge || '',
-                in_stock: initialData.in_stock,
+                in_stock: initialData.in_stock ?? true,
             });
-            setImagePreview(initialData.image);
+            setImagePreview(initialData.image || null);
             setImageFile(null);
         } else {
             resetForm();
@@ -66,7 +66,6 @@ export default function ProductForm({
         setError(null);
         setSuccess(false);
     }, [productId, initialData]);
-
     const resetForm = () => {
         setFormData({
             name: '',
@@ -230,7 +229,7 @@ export default function ProductForm({
                 </div>
 
                 {/* Prix */}
-                <div>
+                {/* <div>
                     <label htmlFor="price" className="block text-sm font-medium mb-2">
                         Prix (FCFA)
                     </label>
@@ -244,10 +243,10 @@ export default function ProductForm({
                         placeholder="50000"
                         disabled={isSubmitting}
                     />
-                </div>
+                </div> */}
 
                 {/* Prix original */}
-                <div>
+                {/* <div>
                     <label htmlFor="original_price" className="block text-sm font-medium mb-2">
                         Prix original (FCFA)
                     </label>
@@ -263,7 +262,7 @@ export default function ProductForm({
                         placeholder="75000"
                         disabled={isSubmitting}
                     />
-                </div>
+                </div> */}
 
                 {/* Catégorie */}
                 <div>
